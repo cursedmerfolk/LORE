@@ -31,6 +31,19 @@ public partial class main : Node
 		Game.Perform(turnAction);
 	}
 
+	public void InkCard(string playerName, int cardIndex)
+	{
+		Lorcana.Player sourcePlayer = Game.Players[playerName];
+		Lorcana.Card sourceCard = sourcePlayer.Hand[cardIndex];
+		Lorcana.TurnAction turnAction = new Lorcana.TurnAction
+		{
+			type = Lorcana.TurnAction.Type.InkCard,
+			SourcePlayer = sourcePlayer,
+			SourceCard = sourceCard,
+		};
+		Game.Perform(turnAction);
+	}
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

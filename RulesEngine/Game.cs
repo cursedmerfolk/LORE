@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+//[JsType(JsMode.Global, Filename="Game.js")]
 namespace Lorcana
 {
 	public class TurnAction
