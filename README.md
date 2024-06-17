@@ -1,7 +1,7 @@
 
 ## Summary
 
-This project aims to be an implementation of the rules for the <redacted> TCG. It should ideally be useable by as many target platforms and game engines as possible.
+This project aims to be an implementation of the rules for the \<redacted\> TCG. It should ideally be useable by as many target platforms and game engines as possible.
 
 It is currently written in csharp because both the Godot and Unity game engines both support that language. Investigation can be done into transpiling to other languages, like Java and Javascript.
 
