@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dftko3h5lqrdf"]
+
+[ext_resource type="Texture2D" uid="uid://cdgoytkgi787x" path="res://Images/woe-95-hopeless-nightmare.jpg" id="1_n8lqm"]
+[ext_resource type="Script" path="res://Scripts/Card.gd" id="2_rc7ne"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vmhdb"]
+size = Vector3(6.8, 0.1, 9.4)
+
+[node name="Card" type="Sprite3D"]
+transform = Transform3D(0.1, 0, 0, 0, -4.37114e-09, 0.1, 0, -0.1, -4.37114e-09, 0, 0, -0.5)
+texture = ExtResource("1_n8lqm")
+script = ExtResource("2_rc7ne")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_vmhdb")

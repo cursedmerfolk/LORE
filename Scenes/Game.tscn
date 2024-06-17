@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://u1fk04ouumou"]
+
+[ext_resource type="Texture2D" uid="uid://xm6362key7bs" path="res://Images/bg1.jpg" id="1_mmfdl"]
+[ext_resource type="PackedScene" uid="uid://dftko3h5lqrdf" path="res://Scenes/Card.tscn" id="2_8k5x7"]
+
+[sub_resource type="Environment" id="Environment_8p32h"]
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="Game" type="Node3D"]
+
+[node name="Background" type="Sprite3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, 0, 0)
+texture = ExtResource("1_mmfdl")
+
+[node name="PlayerHand" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.5)
+
+[node name="Card1" parent="PlayerHand" instance=ExtResource("2_8k5x7")]
+
+[node name="Card3" parent="PlayerHand" instance=ExtResource("2_8k5x7")]
+transform = Transform3D(0.0965926, -0.0258819, -1.13133e-09, 0, -4.37114e-09, 0.1, -0.0258819, -0.0965926, -4.2222e-09, -0.654204, 0, -0.429668)
+
+[node name="Card2" parent="PlayerHand" instance=ExtResource("2_8k5x7")]
+transform = Transform3D(0.0965926, 0.0258819, 1.13133e-09, 0, -4.37114e-09, 0.1, 0.0258819, -0.0965926, -4.2222e-09, 0.648679, 0, -0.391848)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 3, 0)
+environment = SubResource("Environment_8p32h")
