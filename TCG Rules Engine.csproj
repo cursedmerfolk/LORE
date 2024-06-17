@@ -1,7 +1,5 @@
 
 <Project Sdk="Godot.NET.Sdk/4.2.2">
-  <!-- <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildBinPath)\SharpKit\5\SharpKit.Build.targets" /> -->
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>

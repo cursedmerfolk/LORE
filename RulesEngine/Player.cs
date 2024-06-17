@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-//[JsType(JsMode.Global, Filename="Player.js")]
 namespace Lorcana
 {
 	public class Player

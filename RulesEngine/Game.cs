@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-//[JsType(JsMode.Global, Filename="Game.js")]
 namespace Lorcana
 {
 	public class TurnAction
@@ -33,15 +32,15 @@ namespace Lorcana
 			Players = new Dictionary<string, Player>();
 
 			// Add new Player to Players for each numberPlayers
-            foreach (string playerName in playerNames)
-            {
-                Players[playerName] = new Player(playerName);
-            }
+			foreach (string playerName in playerNames)
+			{
+				Players[playerName] = new Player(playerName);
+			}
 		}
 
 		public bool Perform(TurnAction turnAction)
 		{
-			Console.WriteLine($"Performing Turn Action: {turnAction.type}");
+			Console.WriteLine("Performing Turn Action: " + turnAction.type);
 
 			if (turnAction.type == TurnAction.Type.PlayCard)
 			{
