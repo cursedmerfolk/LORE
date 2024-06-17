@@ -90,7 +90,7 @@ func _physics_process(_delta):
 		if is_hovered:
 			is_hovered = false
 			tween_back(0.5)
-			
+
 func tween_back(duration: float):
 	# Tween this card back to it's original position.
 	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
