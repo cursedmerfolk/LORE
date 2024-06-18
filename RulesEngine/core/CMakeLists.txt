@@ -18,3 +18,5 @@ add_library(Lore SHARED ${SOURCES})
 
 # Specify the output name for the shared library
 set_target_properties(Lore PROPERTIES OUTPUT_NAME "Lore")
+
+add_subdirectory("SWIG")

@@ -3,19 +3,16 @@
 
 using namespace Lorcana;
 
-extern "C" {
-
-__declspec(dllexport) void Game_Create(void** game, const char** playerNames, int playerCount) {
-    std::vector<std::string> players(playerNames, playerNames + playerCount);
-    *game = new Game(players);
+void* Game_Create(const char* player1, const char* player2) {
+    std::vector<std::string> players{player1, player2};
+    return new Game(players);
 }
 
-__declspec(dllexport) void Game_Destroy(void** game) {
-    delete (Game*)*game;
-    *game = nullptr;
+void Game_Destroy(void* gamePtr) {
+    delete (Game*)gamePtr;
 }
 
-__declspec(dllexport) void PlayCard(void* gamePtr, const char* playerName, int cardIndex)
+void PlayCard(void* gamePtr, const char* playerName, int cardIndex)
 {
     Game* game = (Game*)gamePtr;
     Player sourcePlayer = game->players[playerName];
@@ -27,7 +24,7 @@ __declspec(dllexport) void PlayCard(void* gamePtr, const char* playerName, int c
     game->Perform(turnAction);
 }
 
-__declspec(dllexport) void InkCard(void* gamePtr, const char* playerName, int cardIndex)
+void InkCard(void* gamePtr, const char* playerName, int cardIndex)
 {
     Game* game = (Game*)gamePtr;
     Player sourcePlayer = game->players[playerName];
@@ -38,5 +35,3 @@ __declspec(dllexport) void InkCard(void* gamePtr, const char* playerName, int ca
     turnAction.sourceCard = sourceCard;
     game->Perform(turnAction);
 }
-
-} // extern C

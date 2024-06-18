@@ -7,4 +7,9 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>TCGRulesEngine</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="game_csharp">
+      <HintPath>..RulesEngine\core\build\SWIG\game_csharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
