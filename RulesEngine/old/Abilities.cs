@@ -9,19 +9,19 @@ namespace Lorcana
 		// These will probably need reference to the Game at some point.
 		public static bool Elsa_SnowQueen_Freeze(TurnAction turnAction)
 		{
-			Card sourceCard = turnAction.SourceCard;
-			Card targetCard = turnAction.TargetCard;
+			Card sourceCard = turnAction.sourceCard;
+			Card targetCard = turnAction.targetCard;
 
-			if (!sourceCard.IsReady)
+			if (!sourceCard.isReady)
 			{
 				return false;
 			}
 
 			// Exert this card.
-			sourceCard.IsReady = false;
+			sourceCard.isReady = false;
 
 			// Exert the chosen card.
-			targetCard.IsReady = false;
+			targetCard.isReady = false;
 
 			return true;
 		}

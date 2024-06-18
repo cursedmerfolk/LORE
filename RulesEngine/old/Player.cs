@@ -30,7 +30,7 @@ namespace Lorcana
 			int numReadyInk = 0;
 			foreach (Card inkedCard in Inkwell)
 			{
-				if (inkedCard.IsReady)
+				if (inkedCard.isReady)
 				{
 					numReadyInk += 1;
 				}

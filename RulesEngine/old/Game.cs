@@ -45,7 +45,7 @@ namespace Lorcana
 			if (turnAction.type == TurnAction.Type.PlayCard)
 			{
 				Player sourcePlayer = turnAction.SourcePlayer;
-				Card sourceCard = turnAction.SourceCard;
+				Card sourceCard = turnAction.sourceCard;
 
 				// Check if there are enough resources to exert.
 				if (!sourcePlayer.CanPlay(sourceCard))
@@ -57,9 +57,9 @@ namespace Lorcana
 				int numExerted = 0;
 				foreach (Card inkedCard in sourcePlayer.Inkwell)
 				{
-					if (inkedCard.IsReady)
+					if (inkedCard.isReady)
 					{
-						inkedCard.IsReady = false;
+						inkedCard.isReady = false;
 						numExerted += 1;
 						if (numExerted >= sourceCard.Cost)
 						{
@@ -75,7 +75,7 @@ namespace Lorcana
 			}
 			else if (turnAction.type == TurnAction.Type.UseAbility)
 			{
-				Card sourceCard = turnAction.SourceCard;
+				Card sourceCard = turnAction.sourceCard;
 				string abilityName = turnAction.AbilityName;
 
 				// Lookup the ability and use it.
@@ -85,12 +85,12 @@ namespace Lorcana
 			else if (turnAction.type == TurnAction.Type.ChallengeCard)
 			{
 				Player sourcePlayer = turnAction.SourcePlayer;
-				Card sourceCard = turnAction.SourceCard;
+				Card sourceCard = turnAction.sourceCard;
 				Player targetPlayer = turnAction.TargetPlayer;
-				Card targetCard = turnAction.TargetCard;
+				Card targetCard = turnAction.targetCard;
 
 				// Exert the card.
-				sourceCard.IsReady = false;
+				sourceCard.isReady = false;
 
 				// Apply damage between the cards.
 				sourceCard.DamageCounters += targetCard.Strength;
@@ -113,7 +113,7 @@ namespace Lorcana
 			else if (turnAction.type == TurnAction.Type.InkCard)
 			{
 				Player sourcePlayer = turnAction.SourcePlayer;
-				Card sourceCard = turnAction.SourceCard;
+				Card sourceCard = turnAction.sourceCard;
 
 				// Check if the card can be inked.
 				if (!sourceCard.Inkable)
@@ -128,16 +128,16 @@ namespace Lorcana
 			else if (turnAction.type == TurnAction.Type.QuestCard)
 			{
 				Player sourcePlayer = turnAction.SourcePlayer;
-				Card sourceCard = turnAction.SourceCard;
+				Card sourceCard = turnAction.sourceCard;
 
 				// Check if it's a ready character.
-				if (sourceCard.CardType != CardType.Character || !sourceCard.IsReady)
+				if (sourceCard.CardType != CardType.Character || !sourceCard.isReady)
 				{
 					return false;
 				}
 
 				// Exert the character.
-				sourceCard.IsReady = false;
+				sourceCard.isReady = false;
 
 				sourcePlayer.LoreTotal += sourceCard.Lore;
 
