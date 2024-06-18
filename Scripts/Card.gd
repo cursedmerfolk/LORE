@@ -1,6 +1,6 @@
 extends Sprite3D
 
-var GameState = load("res://RulesEngine/main.cs")
+var GameState = load("res://RulesEngine/csharp/GodotMain.cs")
 
 var original_scale: Vector3
 var original_position: Vector3

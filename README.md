@@ -1,4 +1,6 @@
 
+# **L**\<redacted\> **O**pensource **R**ules **E**ngine
+
 ## Summary
 
 This project aims to be an implementation of the rules for the \<redacted\> TCG. It should ideally be useable by as many target platforms and game engines as possible.

@@ -117,32 +117,32 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Name
+# Target rules for targets named Lore
 
 # Build rule for target.
-Name: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Name
-.PHONY : Name
+Lore: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Lore
+.PHONY : Lore
 
 # fast build rule for target.
-Name/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Name.dir/build.make CMakeFiles/Name.dir/build
-.PHONY : Name/fast
+Lore/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lore.dir/build.make CMakeFiles/Lore.dir/build
+.PHONY : Lore/fast
 
-src/Game.o: src/Game.cpp.o
-.PHONY : src/Game.o
+src/Game.obj: src/Game.cpp.obj
+.PHONY : src/Game.obj
 
 # target to build an object file
-src/Game.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Name.dir/build.make CMakeFiles/Name.dir/src/Game.cpp.o
-.PHONY : src/Game.cpp.o
+src/Game.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lore.dir/build.make CMakeFiles/Lore.dir/src/Game.cpp.obj
+.PHONY : src/Game.cpp.obj
 
 src/Game.i: src/Game.cpp.i
 .PHONY : src/Game.i
 
 # target to preprocess a source file
 src/Game.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Name.dir/build.make CMakeFiles/Name.dir/src/Game.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lore.dir/build.make CMakeFiles/Lore.dir/src/Game.cpp.i
 .PHONY : src/Game.cpp.i
 
 src/Game.s: src/Game.cpp.s
@@ -150,8 +150,32 @@ src/Game.s: src/Game.cpp.s
 
 # target to generate assembly for a file
 src/Game.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Name.dir/build.make CMakeFiles/Name.dir/src/Game.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lore.dir/build.make CMakeFiles/Lore.dir/src/Game.cpp.s
 .PHONY : src/Game.cpp.s
+
+src/GameWrapper.obj: src/GameWrapper.cpp.obj
+.PHONY : src/GameWrapper.obj
+
+# target to build an object file
+src/GameWrapper.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lore.dir/build.make CMakeFiles/Lore.dir/src/GameWrapper.cpp.obj
+.PHONY : src/GameWrapper.cpp.obj
+
+src/GameWrapper.i: src/GameWrapper.cpp.i
+.PHONY : src/GameWrapper.i
+
+# target to preprocess a source file
+src/GameWrapper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lore.dir/build.make CMakeFiles/Lore.dir/src/GameWrapper.cpp.i
+.PHONY : src/GameWrapper.cpp.i
+
+src/GameWrapper.s: src/GameWrapper.cpp.s
+.PHONY : src/GameWrapper.s
+
+# target to generate assembly for a file
+src/GameWrapper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lore.dir/build.make CMakeFiles/Lore.dir/src/GameWrapper.cpp.s
+.PHONY : src/GameWrapper.cpp.s
 
 # Help Target
 help:
@@ -161,10 +185,13 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... Name"
-	@echo "... src/Game.o"
+	@echo "... Lore"
+	@echo "... src/Game.obj"
 	@echo "... src/Game.i"
 	@echo "... src/Game.s"
+	@echo "... src/GameWrapper.obj"
+	@echo "... src/GameWrapper.i"
+	@echo "... src/GameWrapper.s"
 .PHONY : help
 
 

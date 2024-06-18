@@ -9,17 +9,17 @@
 
 namespace Lorcana {
 
-    enum class TurnActionType {
-        PlayCard,
-        ChallengeCard,
-        InkCard,
-        QuestCard,
-        UseAbility
-    };
-
     class TurnAction {
     public:
-        TurnActionType type;
+        enum Type {
+            PlayCard,
+            ChallengeCard,
+            InkCard,
+            QuestCard,
+            UseAbility
+        };
+
+        Type type;
         Player sourcePlayer;
         Card sourceCard;
         Player targetPlayer;

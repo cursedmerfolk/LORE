@@ -15,15 +15,15 @@ namespace Lorcana {
         std::cout << "Performing Turn Action: " << static_cast<int>(turnAction.type) << std::endl;
 
         switch (turnAction.type) {
-            case TurnActionType::PlayCard:
+            case TurnAction::Type::PlayCard:
                 return PlayCard(turnAction.sourcePlayer, turnAction.sourceCard);
-            case TurnActionType::UseAbility:
+            case TurnAction::Type::UseAbility:
                 return UseAbility(turnAction.sourceCard, turnAction.abilityName, turnAction);
-            case TurnActionType::ChallengeCard:
+            case TurnAction::Type::ChallengeCard:
                 return ChallengeCard(turnAction.sourcePlayer, turnAction.sourceCard, turnAction.targetPlayer, turnAction.targetCard);
-            case TurnActionType::InkCard:
+            case TurnAction::Type::InkCard:
                 return InkCard(turnAction.sourcePlayer, turnAction.sourceCard);
-            case TurnActionType::QuestCard:
+            case TurnAction::Type::QuestCard:
                 return QuestCard(turnAction.sourcePlayer, turnAction.sourceCard);
             default:
                 return false;

@@ -14,7 +14,7 @@ include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
 
 # Create the shared library
-add_library(Name SHARED ${SOURCES})
+add_library(Lore SHARED ${SOURCES})
 
 # Specify the output name for the shared library
-set_target_properties(Name PROPERTIES OUTPUT_NAME "Lore")
+set_target_properties(Lore PROPERTIES OUTPUT_NAME "Lore")

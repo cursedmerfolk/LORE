@@ -10,6 +10,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../CMakeLists.txt"
   "CMakeFiles/3.22.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.22.1/CMakeRCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeSystem.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeCCompiler.cmake.in"
   "/usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c"
@@ -25,6 +26,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeDetermineCompilerABI.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeDetermineCompilerId.cmake"
+  "/usr/share/cmake-3.22/Modules/CMakeDetermineRCCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake"
@@ -33,12 +35,15 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.22/Modules/CMakeParseImplicitIncludeInfo.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeParseLibraryArchitecture.cmake"
+  "/usr/share/cmake-3.22/Modules/CMakeRCCompiler.cmake.in"
+  "/usr/share/cmake-3.22/Modules/CMakeRCInformation.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeSystem.cmake.in"
   "/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeTestCompilerCommon.cmake"
+  "/usr/share/cmake-3.22/Modules/CMakeTestRCCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/CMakeUnixFindMake.cmake"
   "/usr/share/cmake-3.22/Modules/Compiler/ADSP-DetermineCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/Compiler/ARMCC-DetermineCompiler.cmake"
@@ -92,12 +97,15 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.22/Modules/Compiler/zOS-C-DetermineCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake"
   "/usr/share/cmake-3.22/Modules/Internal/FeatureTesting.cmake"
-  "/usr/share/cmake-3.22/Modules/Platform/Linux-Determine-CXX.cmake"
-  "/usr/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake"
-  "/usr/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake"
-  "/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake"
-  "/usr/share/cmake-3.22/Modules/Platform/Linux.cmake"
-  "/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows-Determine-CXX.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows-GNU-C-ABI.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows-GNU-C.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows-GNU-CXX-ABI.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows-GNU-CXX.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows-GNU.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows-windres.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/Windows.cmake"
+  "/usr/share/cmake-3.22/Modules/Platform/WindowsPaths.cmake"
   )
 
 # The corresponding makefile is:
@@ -111,6 +119,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/3.22.1/CMakeSystem.cmake"
   "CMakeFiles/3.22.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.22.1/CMakeRCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
@@ -118,5 +127,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/Name.dir/DependInfo.cmake"
+  "CMakeFiles/Lore.dir/DependInfo.cmake"
   )
