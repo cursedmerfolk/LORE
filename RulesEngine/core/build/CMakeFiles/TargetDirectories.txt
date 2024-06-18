@@ -1,3 +1,0 @@
-/mnt/c/Users/evan/GitHub/tcg_rules_engine_csharp/RulesEngine/core/build/CMakeFiles/Lore.dir
-/mnt/c/Users/evan/GitHub/tcg_rules_engine_csharp/RulesEngine/core/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/evan/GitHub/tcg_rules_engine_csharp/RulesEngine/core/build/CMakeFiles/rebuild_cache.dir
