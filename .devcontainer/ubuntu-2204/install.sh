@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sudo apt update -y
+apt update -y
+apt install sudo
 sudo apt install -y git
 sudo apt install -y swig
 sudo apt install -y mingw-w64

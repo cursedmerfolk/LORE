@@ -15,6 +15,7 @@
         "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
     ],
     "runArgs": [
+        "-it",
         "--privileged"
     ]
 }
