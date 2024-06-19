@@ -22,7 +22,6 @@ include_directories(/usr/lib/jvm/java-11-openjdk-amd64/include/linux)
 set(CMAKE_SWIG_FLAGS "")
 
 # Header and source files
-# file(GLOB HEADERS "../include/*.h")
 include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
 

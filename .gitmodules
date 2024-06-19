@@ -1,0 +1,3 @@
+[submodule "RulesEngine/core/jsoncpp"]
+	path = RulesEngine/core/jsoncpp
+	url = git@github.com:open-source-parsers/jsoncpp.git
