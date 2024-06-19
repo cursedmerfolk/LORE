@@ -1,0 +1,21 @@
+name: Build and Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Run build commands in container
+      run: |
+        source .devcontainer/ubuntu2204/install.sh
+        cd RulesEngine/core
+        make jsoncpp_build
+        make windows
