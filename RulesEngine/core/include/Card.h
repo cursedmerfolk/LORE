@@ -1,73 +1,76 @@
 #pragma once
 
+#include <json/json.h>
+
 #include <string>
 #include <vector>
 
-#include <json/json.h>
 
-namespace Lorcana {
+namespace Lorcana
+{
 
-    // Enums
-    enum class CardType {
-        Character,
-        Action,
-        Item,
-        Location,
-        Song
-    };
+// Enums
+enum class CardType
+{
+    Character,
+    Action,
+    Item,
+    Location,
+    Song
+};
 
-    enum class Classification {
-        Ally,
-        Villain,
-        Hero,
-        Alien,
-        Dreamborn,
-        Storyborn,
-        Floodborn
-    };
+enum class Classification
+{
+    Ally,
+    Villain,
+    Hero,
+    Alien,
+    Dreamborn,
+    Storyborn,
+    Floodborn
+};
 
-    enum class Rarity {
-        Common,
-        Uncommon,
-        Rare,
-        SuperRare,
-        Legendary,
-        Enchanted
-    };
+enum class Rarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    SuperRare,
+    Legendary,
+    Enchanted
+};
 
-    CardType getCardType(const std::string& typeStr);
-    Classification getClassification(const std::string& classStr);
-    Rarity getRarity(const std::string& rarityStr);
+CardType getCardType(const std::string& typeStr);
+Classification getClassification(const std::string& classStr);
+Rarity getRarity(const std::string& rarityStr);
 
-    class Card {
-    public:
+class Card
+{
+public:
+    // Main attributes.
+    uint8_t cost;
+    std::string name;
+    std::string version;
+    CardType cardType;
+    std::vector<Classification> classifications;
+    uint8_t strength;
+    uint8_t willpower;
+    uint8_t lore;
+    bool inkable;
+    std::string cardText;
+    Rarity rarity;
+    uint8_t damageCounters;
+    bool isReady;
+    bool isDry = false;
 
-        // Main attributes.
-        uint8_t cost;
-        std::string name;
-        std::string version;
-        CardType cardType;
-        std::vector<Classification> classifications;
-        uint8_t strength;
-        uint8_t willpower;
-        uint8_t lore;
-        bool inkable;
-        std::string cardText;
-        Rarity rarity;
-        uint8_t damageCounters;
-        bool isReady;
-        bool isDry = false;
+    // Other attributes.
+    bool canReady = true;
 
-        // Other attributes.
-        bool canReady = true;
+    Card() = default;
+    ~Card() = default;
+    Card(const Card& other) = default;
 
-        Card() = default;
-        ~Card() = default;
-        Card(const Card& other) = default;
+    Card(const Json::Value& jsonValue);
+};
 
-        Card(const Json::Value& jsonValue);
-
-    };
-
-} // namespace Lorcana
-
+}  // namespace Lorcana
