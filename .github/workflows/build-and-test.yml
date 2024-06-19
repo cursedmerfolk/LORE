@@ -18,7 +18,7 @@ jobs:
 
     - name: Run build commands in container
       run: |
-        sudo ./.devcontainer/ubuntu-2204/install.sh
+        ./.devcontainer/ubuntu-2204/install.sh
         cd RulesEngine/core
-        sudo make jsoncpp_build
-        sudo make windows
+        make jsoncpp_build
+        make windows
