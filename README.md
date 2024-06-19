@@ -5,17 +5,26 @@
 
 This project aims to be an implementation of the rules for the \<redacted\> TCG. It should ideally be useable by as many target platforms and game engines as possible.
 
-It is currently written in csharp because both the Godot and Unity game engines both support that language. Investigation can be done into transpiling to other languages, like Java and Javascript.
+I'm flexible on ideas / programming languages / goals etc, feel free to throw around ideas.
+
+The engine is currently written in C++ (at `RulesEngine/core/`) and uses SWIG to generate bindings for csharp and java (and other languages as desired).
 
 This is currently a project that runs in Godot, but the RulesEngine library should be separated from Godot at some future point.
 
-I'm flexible on ideas / programming languages / goals etc, feel free to throw around ideas.
+## Building / Development
+
+ - Install vscode and docker (docker desktop on windows)
+ - Clone the repo and open it in vscode.
+ - Install the dev containers vscode extension.
+ - Open the vscode command pallete (F1 on windows) and select 'Reopin in Container'
+ - The container should open with everything needed to build the project.
+ - `cd RulesEngine/core/` and run `make json_cpp` once, then `make windows` subsequently to build changes.
 
 ## Desired Features
 
  - Full rules implementation + tests.
  - Websocket support with client and server libraries.
- - Transpiling to Java, Javascript, other languages.
+ - Wrapper projects using various languages engines (javascript, java, etc).
  - Support for creators to write a rules engine as a plugin (for other games), to be used generically by the engine.
 
 
