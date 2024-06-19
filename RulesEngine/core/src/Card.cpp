@@ -1,5 +1,6 @@
 #include "Card.h"
 
+
 namespace Lorcana {
 
     Card::Card(const Json::Value& jsonValue)
@@ -21,6 +22,7 @@ namespace Lorcana {
         cardText = jsonValue["fullText"].asString();
         rarity = getRarity(jsonValue["rarity"].asString());
     }
+
 
     CardType getCardType(const std::string& typeStr) {
         if (typeStr == "Character") return CardType::Character;

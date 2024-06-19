@@ -41,21 +41,25 @@ namespace Lorcana {
 
     class Card {
     public:
-			 
-        int cost;
+
+        // Main attributes.
+        uint8_t cost;
         std::string name;
         std::string version;
         CardType cardType;
         std::vector<Classification> classifications;
-        int strength;
-        int willpower;
-        int lore;
+        uint8_t strength;
+        uint8_t willpower;
+        uint8_t lore;
         bool inkable;
         std::string cardText;
         Rarity rarity;
-        int damageCounters;
+        uint8_t damageCounters;
         bool isReady;
-        bool isDry;
+        bool isDry = false;
+
+        // Other attributes.
+        bool canReady = true;
 
         Card() = default;
         ~Card() = default;

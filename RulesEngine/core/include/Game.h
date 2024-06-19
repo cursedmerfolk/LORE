@@ -31,14 +31,15 @@ namespace Lorcana {
     class Game {
     public:
         std::vector<Card> cards;
+        // std::vector<std::function<void>> bag;
         std::unordered_map<std::string, Player> players;
+		std::unordered_map<std::string, std::function<bool(TurnAction&)>> abilities;
 
         Game(const std::vector<std::string>& playerNames);
 
         bool Perform(TurnAction& turnAction);
 		
 		static bool Elsa_SnowQueen_Freeze(TurnAction& turnAction);
-		std::unordered_map<std::string, std::function<bool(TurnAction&)>> abilities;
 
     private:
         bool PlayCard(Player& sourcePlayer, Card& sourceCard);

@@ -24,21 +24,11 @@ namespace Lorcana {
 		std::vector<Card> deck;
 		std::vector<Card> inkwell;
 
-		bool canPlay(const Card& card) {
-			int numReadyInk = 0;
-			for (const Card& inkedCard : inkwell) {
-				if (inkedCard.isReady) {
-					numReadyInk += 1;
-				}
-			}
+		bool TurnStart();
+		bool CanPlay(const Card& card);
+        bool DoReadyPhase(Card& card);
+        bool DoSetPhase(Card& card);
 
-		// 	// TODO: enable once Inkwell is implemented.
-		// 	// if (card.Cost > numReadyInk) {
-		// 	//     return false;
-		// 	// }
-
-			return true;
-		}
 	};
 
 } // namespace Lorcana

@@ -9,6 +9,8 @@ namespace Lorcana {
         for (const auto& name : playerNames) {
             players[name] = Player(name);
         }
+
+        // Register abilities in lookup map.
         abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
 
         // Load all cards.
@@ -60,7 +62,7 @@ namespace Lorcana {
     }
 
     bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard) {
-        if (!sourcePlayer.canPlay(sourceCard)) {
+        if (!sourcePlayer.CanPlay(sourceCard)) {
             return false;
         }
 
