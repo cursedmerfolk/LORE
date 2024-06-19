@@ -1,10 +1,10 @@
 name: Build and Test
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-  # workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
 
     - name: Run build commands in container
       run: |
-        source .devcontainer/ubuntu2204/install.sh
+        source .devcontainer/ubuntu-2204/install.sh
         cd RulesEngine/core
         make jsoncpp_build
         make windows
