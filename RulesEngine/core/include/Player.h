@@ -14,15 +14,18 @@ namespace Lorcana {
 		~Player() = default;
 		Player(const Player& other) = default;
 
-		Player(const std::string& name_) : name(name_) {}
+		Player(const std::string& name_) : name(name_), id(Player::currentId++) {}
 
+		uint8_t id;
+		uint8_t loreTotal = 0;
 		std::string name;
 		std::vector<Card> hand;
 		std::vector<Card> field;
 		std::vector<Card> discard;
-		int loreTotal = 0;
 		std::vector<Card> deck;
 		std::vector<Card> inkwell;
+
+		static uint8_t currentId;
 
 		bool TurnStart();
 		bool CanPlay(const Card& card);

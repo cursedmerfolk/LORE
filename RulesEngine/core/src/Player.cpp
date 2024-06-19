@@ -3,8 +3,9 @@
 #include "Player.h"
 
 
-
 namespace Lorcana {
+
+    uint8_t Player::currentId = 0;
 
     bool Player::TurnStart()
     {

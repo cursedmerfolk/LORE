@@ -7,45 +7,58 @@
 
 #include "Player.h"
 
-namespace Lorcana {
+namespace Lorcana
+{
 
-    class TurnAction {
-    public:
-        enum Type {
-            PlayCard,
-            ChallengeCard,
-            InkCard,
-            QuestCard,
-            UseAbility
-        };
-
-        Type type;
-        Player sourcePlayer;
-        Card sourceCard;
-        Player targetPlayer;
-        Card targetCard;
-        std::vector<Card> singers;
-        std::string abilityName;
+class TurnAction
+{
+public:
+    enum Type
+    {
+        PlayCard,
+        ChallengeCard,
+        InkCard,
+        QuestCard,
+        UseAbility,
+        PassTurn
     };
 
-    class Game {
-    public:
-        std::vector<Card> cards;
-        // std::vector<std::function<void>> bag;
-        std::unordered_map<std::string, Player> players;
-		std::unordered_map<std::string, std::function<bool(TurnAction&)>> abilities;
+    Type type;
+    Player sourcePlayer;
+    Card sourceCard;
+    Player targetPlayer;
+    Card targetCard;
+    std::vector<Card> singers;
+    std::string abilityName;
+};
 
-        Game(const std::vector<std::string>& playerNames);
+class Game
+{
+public:
+    Player currentPlayer;
+    std::vector<Card> cards;
+    // std::vector<std::function<void>> bag;
+    std::vector<Player> players;
+    std::unordered_map<std::string, std::function<bool(TurnAction&)>> abilities;
 
-        bool Perform(TurnAction& turnAction);
-		
-		static bool Elsa_SnowQueen_Freeze(TurnAction& turnAction);
+    Game() = default;
+    ~Game() = default;
+    Game(const Game& other) = default;
 
-    private:
-        bool PlayCard(Player& sourcePlayer, Card& sourceCard);
-        bool UseAbility(Card& sourceCard, const std::string& abilityName, TurnAction& turnAction);
-        bool ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard);
-        bool InkCard(Player& sourcePlayer, Card& sourceCard);
-        bool QuestCard(Player& sourcePlayer, Card& sourceCard);
-    };
-}
+    Game(const std::vector<std::string>& playerNames);
+
+    bool Perform(TurnAction& turnAction);
+
+    static bool Elsa_SnowQueen_Freeze(TurnAction& turnAction);
+
+private:
+    bool PlayCard(Player& sourcePlayer, Card& sourceCard);
+    bool UseAbility(Card& sourceCard, const std::string& abilityName,
+                    TurnAction& turnAction);
+    bool ChallengeCard(Player& sourcePlayer, Card& sourceCard,
+                       Player& targetPlayer, Card& targetCard);
+    bool InkCard(Player& sourcePlayer, Card& sourceCard);
+    bool QuestCard(Player& sourcePlayer, Card& sourceCard);
+    bool PassTurn(Player& sourcePlayer);
+};
+}  // namespace Lorcana

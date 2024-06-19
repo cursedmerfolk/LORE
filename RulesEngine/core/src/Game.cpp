@@ -3,19 +3,25 @@
 
 #include "Game.h"
 
+
 namespace Lorcana {
 
-    Game::Game(const std::vector<std::string>& playerNames) {
-        for (const auto& name : playerNames) {
-            players[name] = Player(name);
+    Game::Game(const std::vector<std::string>& playerNames)
+    {
+        for (const auto& name : playerNames)
+        {
+            players.emplace_back(name);
         }
+
+        currentPlayer = players.at(0);
 
         // Register abilities in lookup map.
         abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
 
         // Load all cards.
         std::ifstream file("allCards.json");
-        if (!file.is_open()) {
+        if (!file.is_open())
+        {
             std::cerr << "Error opening file" << std::endl;
             return;
         }
@@ -28,12 +34,14 @@ namespace Lorcana {
         Json::Value root;
         std::string errs;
 
-        if (!Json::parseFromStream(readerBuilder, buffer, &root, &errs)) {
+        if (!Json::parseFromStream(readerBuilder, buffer, &root, &errs))
+        {
             std::cerr << "Error parsing JSON: " << errs << std::endl;
             return;
         }
 
-        for (const auto& jsonValue : root["cards"]) {
+        for (const auto& jsonValue : root["cards"])
+        {
             try {
                 cards.emplace_back(jsonValue);
             } catch (const std::exception& e) {
@@ -56,6 +64,8 @@ namespace Lorcana {
                 return InkCard(turnAction.sourcePlayer, turnAction.sourceCard);
             case TurnAction::Type::QuestCard:
                 return QuestCard(turnAction.sourcePlayer, turnAction.sourceCard);
+            case TurnAction::Type::PassTurn:
+                return PassTurn(turnAction.sourcePlayer);
             default:
                 return false;
         }
@@ -121,13 +131,28 @@ namespace Lorcana {
         return true;
     }
 
-    bool Game::QuestCard(Player& sourcePlayer, Card& sourceCard) {
-        if (sourceCard.cardType != CardType::Character || !sourceCard.isReady) {
+    bool Game::QuestCard(Player& sourcePlayer, Card& sourceCard)
+    {
+        if (sourceCard.cardType != CardType::Character || !sourceCard.isReady)
+        {
             return false;
         }
 
         sourceCard.isReady = false;
         sourcePlayer.loreTotal += sourceCard.lore;
+
+        return true;
+    }
+
+    bool Game::PassTurn(Player& sourcePlayer)
+    {
+        // Find player by ID.
+        auto it = std::find_if(players.begin(), players.end(), [&sourcePlayer](const Player& player) {
+            return player.id == sourcePlayer.id;
+        });
+        int playerIndex = std::distance(players.begin(), it);
+        int nextIndex = (playerIndex + 1) % players.size();
+        currentPlayer = players.at(nextIndex);
 
         return true;
     }
