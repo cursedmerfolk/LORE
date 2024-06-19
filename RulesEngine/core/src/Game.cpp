@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "Game.h"
 
@@ -9,6 +10,34 @@ namespace Lorcana {
             players[name] = Player(name);
         }
         abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
+
+        // Load all cards.
+        std::ifstream file("allCards.json");
+        if (!file.is_open()) {
+            std::cerr << "Error opening file" << std::endl;
+            return;
+        }
+
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        std::string jsonData = buffer.str();
+
+        Json::CharReaderBuilder readerBuilder;
+        Json::Value root;
+        std::string errs;
+
+        if (!Json::parseFromStream(readerBuilder, buffer, &root, &errs)) {
+            std::cerr << "Error parsing JSON: " << errs << std::endl;
+            return;
+        }
+
+        for (const auto& jsonValue : root["cards"]) {
+            try {
+                cards.emplace_back(jsonValue);
+            } catch (const std::exception& e) {
+                std::cerr << "Error parsing card: " << e.what() << std::endl;
+            }
+        }
     }
 
     bool Game::Perform(TurnAction& turnAction) {

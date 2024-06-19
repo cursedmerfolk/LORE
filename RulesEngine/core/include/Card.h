@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include <json/json.h>
+
 namespace Lorcana {
 
     // Enums
@@ -33,7 +35,10 @@ namespace Lorcana {
         Enchanted
     };
 
-    // Class definition
+    CardType getCardType(const std::string& typeStr);
+    Classification getClassification(const std::string& classStr);
+    Rarity getRarity(const std::string& rarityStr);
+
     class Card {
     public:
 			 
@@ -51,6 +56,12 @@ namespace Lorcana {
         int damageCounters;
         bool isReady;
         bool isDry;
+
+        Card() = default;
+        ~Card() = default;
+        Card(const Card& other) = default;
+
+        Card(const Json::Value& jsonValue);
 
     };
 

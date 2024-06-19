@@ -30,6 +30,7 @@ namespace Lorcana {
 
     class Game {
     public:
+        std::vector<Card> cards;
         std::unordered_map<std::string, Player> players;
 
         Game(const std::vector<std::string>& playerNames);

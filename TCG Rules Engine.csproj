@@ -8,8 +8,28 @@
     <RootNamespace>TCGRulesEngine</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="game_csharp">
-      <HintPath>..RulesEngine\core\build\SWIG\game_csharp.dll</HintPath>
-    </Reference>
+    <None Update="game_csharp.dll">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+  <!-- <ItemGroup>
+    <Reference Include=game_csharp>
+      <HintPath>..RulesEngine\core\build\game_csharp.dll</HintPath>
+    </Reference>
+  </ItemGroup> -->
+  <!-- <ItemGroup>
+    <Reference Include="game_csharp"> 
+      <HintPath>$(ProjectDir)RulesEngine\core\build\game_csharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup> -->
+ <!-- <ItemGroup>
+    <Content Include="$(SolutionDir)RulesEngine\core\build\game_csharp.dll">
+      <Pack>true</Pack>
+      <BuildAction>None</BuildAction>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup> -->
 </Project>
