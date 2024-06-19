@@ -1,0 +1,20 @@
+{
+    "name": "Ubuntu 22.04 Development Container",
+    "dockerFile": "Dockerfile",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "editor.formatOnSave": true
+    },
+    "extensions": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "redhat.java",
+        "xaver.clang-format"
+    ],
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+    ],
+    "runArgs": [
+        "--privileged"
+    ]
+}
