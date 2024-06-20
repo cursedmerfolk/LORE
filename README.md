@@ -23,7 +23,7 @@ This is currently a project that runs in Godot, but the RulesEngine library shou
 ## Desired Features
 
  - Full rules implementation + tests.
- - Websocket support with client and server libraries.
+ - Client and Server libraries.
  - Wrapper projects using various languages engines (javascript, java, etc).
  - Support for creators to write a rules engine as a plugin (for other games), to be used generically by the engine.
 

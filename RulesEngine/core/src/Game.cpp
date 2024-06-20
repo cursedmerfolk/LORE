@@ -19,7 +19,7 @@ Game::Game(const std::vector<std::string>& playerNames)
     abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
 
     // Load all cards.
-    std::ifstream file("allCards.json");
+    std::ifstream file("../../allCards.json");
     if (!file.is_open())
     {
         std::cerr << "Error opening file" << std::endl;
@@ -55,22 +55,34 @@ Game::Game(const std::vector<std::string>& playerNames)
 
 bool Game::Perform(TurnAction& turnAction)
 {
+    Player sourcePlayer = turnAction.sourcePlayer;
+
+    if (sourcePlayer.id != currentPlayer.id)
+    {
+        return false;
+    }
+
+    if (currentPhase != Phase::Main)
+    {
+        return false;
+    }
+
     std::cout << "Performing Turn Action: " << static_cast<int>(turnAction.type) << std::endl;
 
     switch (turnAction.type)
     {
         case TurnAction::Type::PlayCard:
-            return PlayCard(turnAction.sourcePlayer, turnAction.sourceCard);
+            return PlayCard(sourcePlayer, turnAction.sourceCard);
         case TurnAction::Type::UseAbility:
             return UseAbility(turnAction.sourceCard, turnAction.abilityName, turnAction);
         case TurnAction::Type::ChallengeCard:
-            return ChallengeCard(turnAction.sourcePlayer, turnAction.sourceCard, turnAction.targetPlayer, turnAction.targetCard);
+            return ChallengeCard(sourcePlayer, turnAction.sourceCard, turnAction.targetPlayer, turnAction.targetCard);
         case TurnAction::Type::InkCard:
-            return InkCard(turnAction.sourcePlayer, turnAction.sourceCard);
+            return InkCard(sourcePlayer, turnAction.sourceCard);
         case TurnAction::Type::QuestCard:
-            return QuestCard(turnAction.sourcePlayer, turnAction.sourceCard);
+            return QuestCard(sourcePlayer, turnAction.sourceCard);
         case TurnAction::Type::PassTurn:
-            return PassTurn(turnAction.sourcePlayer);
+            return PassTurn(sourcePlayer);
         default:
             return false;
     }

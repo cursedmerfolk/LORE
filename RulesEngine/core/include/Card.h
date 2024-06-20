@@ -16,18 +16,41 @@ enum class CardType
     Action,
     Item,
     Location,
-    Song
 };
 
 enum class Classification
 {
     Ally,
+    Knight,
+    Hyena,
+    Detective,
+    Captain,
+    Inventor,
     Villain,
+    Deity,
+    Queen,
+    Princess,
+    Madrigal,
+    Musketeer,
+    Sorcerer,
+    Seven_Dwarfs,
+    Tigger,
+    Dragon,
+    Pirate,
+    Puppy,
+    Titan,
+    Fairy,
+    Broom,
+    King,
+    Prince,
+    Mentor,
     Hero,
     Alien,
     Dreamborn,
     Storyborn,
-    Floodborn
+    Floodborn,
+    Entangled,
+    Song,
 };
 
 enum class Rarity
@@ -35,9 +58,10 @@ enum class Rarity
     Common,
     Uncommon,
     Rare,
-    SuperRare,
+    Super_Rare,
     Legendary,
-    Enchanted
+    Enchanted,
+    Special,
 };
 
 CardType getCardType(const std::string& typeStr);

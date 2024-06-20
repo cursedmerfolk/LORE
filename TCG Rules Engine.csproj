@@ -9,7 +9,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Update="game_csharp.dll">
-      <Pack>true</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

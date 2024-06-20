@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <functional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -32,10 +33,19 @@ public:
     std::string abilityName;
 };
 
+enum Phase
+{
+    Ready,
+    Set,
+    Draw,
+    Main,
+};
+
 class Game
 {
 public:
     Player currentPlayer;
+    Phase currentPhase = Phase::Ready;
     std::vector<Card> cards;
     // std::vector<std::function<void>> bag;
     std::vector<Player> players;
@@ -60,5 +70,7 @@ private:
     bool InkCard(Player& sourcePlayer, Card& sourceCard);
     bool QuestCard(Player& sourcePlayer, Card& sourceCard);
     bool PassTurn(Player& sourcePlayer);
+
+    // bool ResolveAbility(std::function<void>); // Resolve an ability in the bag.
 };
 }  // namespace Lorcana
