@@ -6,6 +6,18 @@
 namespace Lorcana
 {
 
+// Generic filter function
+template <typename TYPE, typename CLASS>
+std::vector<CLASS> filterBy(const std::vector<CLASS>& instances, TYPE CLASS::*property, TYPE value) {
+    std::vector<CLASS> found;
+    for (const CLASS& instance : instances) {
+        if (instance.*property == value) {
+            found.push_back(instance);
+        }
+    }
+    return found;
+}
+
 Game::Game(const std::vector<std::string>& playerNames)
 {
     for (const auto& name : playerNames)
@@ -14,6 +26,18 @@ Game::Game(const std::vector<std::string>& playerNames)
     }
 
     currentPlayer = players.at(0);
+
+    
+    std::vector<Player> done = filterBy(players, &Player::doneMulligan, true);
+    for (auto& element : done)
+    {
+        std::cout << element.name << std::endl;
+    }
+    if (done.empty())
+    {
+        std::cout << "hi1" << std::endl;
+        currentPhase = Phase::Ready;
+    }
 
     // Register abilities in lookup map.
     abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
@@ -40,7 +64,7 @@ Game::Game(const std::vector<std::string>& playerNames)
         return;
     }
 
-    for (const auto& jsonValue : root["cards"])
+    for (const Json::Value& jsonValue : root["cards"])
     {
         try
         {
@@ -53,9 +77,39 @@ Game::Game(const std::vector<std::string>& playerNames)
     }
 }
 
+// Json::Value Game::GetCurrentState()
+// {
+//     // Not sure what this is going to look like
+// }
+
 bool Game::Perform(TurnAction& turnAction)
 {
     Player sourcePlayer = turnAction.sourcePlayer;
+
+    if (currentPhase == Phase::Mulligan)
+    {
+        std::vector<uint8_t> mulligans = turnAction.mulligans;
+        std::sort(mulligans.rbegin(), mulligans.rend());  // Descending order.
+        for (const uint8_t& cardIndex : mulligans)
+        {
+            if (cardIndex < 0 || cardIndex >= sourcePlayer.hand.size())
+            {
+                return false;
+            }
+            sourcePlayer.hand.erase(sourcePlayer.hand.begin() + cardIndex);
+        }
+
+        sourcePlayer.doneMulligan = true;
+
+        // Go to next phase if all players have finished their Mulligan.
+        std::vector<Player> done = filterBy(players, &Player::doneMulligan, true);
+        if (done.empty())
+        {
+            currentPhase = Phase::Ready;
+        }
+
+        return true;
+    }
 
     if (sourcePlayer.id != currentPlayer.id)
     {

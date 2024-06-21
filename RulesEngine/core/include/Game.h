@@ -11,6 +11,7 @@
 namespace Lorcana
 {
 
+// TODO/Note: this may just get turned into a Json::Value at some point.
 class TurnAction
 {
 public:
@@ -31,10 +32,12 @@ public:
     Card targetCard;
     std::vector<Card> singers;
     std::string abilityName;
+    std::vector<uint8_t> mulligans;
 };
 
 enum Phase
 {
+    Mulligan,
     Ready,
     Set,
     Draw,
@@ -45,7 +48,7 @@ class Game
 {
 public:
     Player currentPlayer;
-    Phase currentPhase = Phase::Ready;
+    Phase currentPhase = Phase::Mulligan;
     std::vector<Card> cards;
     // std::vector<std::function<void>> bag;
     std::vector<Player> players;
