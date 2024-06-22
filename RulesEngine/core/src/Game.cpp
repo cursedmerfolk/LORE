@@ -1,53 +1,61 @@
 #include "Game.h"
 
-#include <fstream>
-#include <iostream>
-
 namespace Lorcana
 {
 
-// Generic filter function
-template <typename TYPE, typename CLASS>
-std::vector<CLASS> filterBy(const std::vector<CLASS>& instances, TYPE CLASS::*property, TYPE value) {
-    std::vector<CLASS> found;
-    for (const CLASS& instance : instances) {
-        if (instance.*property == value) {
-            found.push_back(instance);
-        }
-    }
-    return found;
-}
-
-Game::Game(const std::vector<std::string>& playerNames)
+Game::Game(const std::vector<std::string>& playerNames, unsigned int seed)
 {
+    std::mt19937 generator(seed); // Mersenne Twister random number generator
+
     for (const auto& name : playerNames)
     {
         players.emplace_back(name);
     }
 
-    currentPlayer = players.at(0);
+    std::uniform_int_distribution<> distr(0, players.size() - 1);
+    int random_number = distr(generator);
+    currentPlayer = &players.at(random_number);
 
-    
-    std::vector<Player> done = filterBy(players, &Player::doneMulligan, true);
-    for (auto& element : done)
+    if (!loadCardJson("../../../allCards.json"))
     {
-        std::cout << element.name << std::endl;
-    }
-    if (done.empty())
-    {
-        std::cout << "hi1" << std::endl;
-        currentPhase = Phase::Ready;
+        return;
     }
 
     // Register abilities in lookup map.
     abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
 
+    // Number from 1 to N cards.
+    std::vector<int> indices;
+    for (int i = 1; i <= cards.size(); ++i)
+    {
+        indices.push_back(i);
+    }
+
+    // Each player draws 7 cards.
+    for (Player& player : players)
+    {
+        // Make random decks for now.
+        std::shuffle(indices.begin(), indices.end(), generator);
+        for (int i = 1; i <= 60; ++i)
+        {
+            player.deck.push_back(cards.at(indices.at(i)));
+        }
+
+        // Draw 7.
+        player.DrawCards(7);
+    }
+
+}
+
+
+bool Game::loadCardJson(const std::string& fileName)
+{
     // Load all cards.
-    std::ifstream file("../../allCards.json");
+    std::ifstream file(fileName);
     if (!file.is_open())
     {
-        std::cerr << "Error opening file" << std::endl;
-        return;
+        std::cerr << "Error opening file: " << fileName << std::endl;
+        return false;
     }
 
     std::stringstream buffer;
@@ -61,7 +69,7 @@ Game::Game(const std::vector<std::string>& playerNames)
     if (!Json::parseFromStream(readerBuilder, buffer, &root, &errs))
     {
         std::cerr << "Error parsing JSON: " << errs << std::endl;
-        return;
+        return false;
     }
 
     for (const Json::Value& jsonValue : root["cards"])
@@ -75,6 +83,8 @@ Game::Game(const std::vector<std::string>& playerNames)
             std::cerr << "Error parsing card: " << e.what() << std::endl;
         }
     }
+
+    return true;
 }
 
 // Json::Value Game::GetCurrentState()
@@ -84,12 +94,18 @@ Game::Game(const std::vector<std::string>& playerNames)
 
 bool Game::Perform(TurnAction& turnAction)
 {
-    Player sourcePlayer = turnAction.sourcePlayer;
+    Player& sourcePlayer = *turnAction.sourcePlayer;
 
     if (currentPhase == Phase::Mulligan)
     {
-        std::vector<uint8_t> mulligans = turnAction.mulligans;
-        std::sort(mulligans.rbegin(), mulligans.rend());  // Descending order.
+        if (turnAction.type != TurnAction::Type::Mulligan)
+        {
+            return false;
+        }
+
+        std::vector<uint8_t> mulligans = *turnAction.mulligans;
+        std::sort(mulligans.rbegin(), mulligans.rend());  // Descending order. TODO: verify this.
+
         for (const uint8_t& cardIndex : mulligans)
         {
             if (cardIndex < 0 || cardIndex >= sourcePlayer.hand.size())
@@ -99,19 +115,22 @@ bool Game::Perform(TurnAction& turnAction)
             sourcePlayer.hand.erase(sourcePlayer.hand.begin() + cardIndex);
         }
 
+        // Draw that many cards.
+        sourcePlayer.DrawCards(mulligans.size());
         sourcePlayer.doneMulligan = true;
 
         // Go to next phase if all players have finished their Mulligan.
-        std::vector<Player> done = filterBy(players, &Player::doneMulligan, true);
-        if (done.empty())
+        std::vector<Player> notDone = filterBy(players, &Player::doneMulligan, false);
+        if (notDone.empty())
         {
-            currentPhase = Phase::Ready;
+            currentPlayer->DoTurnStart(false);
+            currentPhase = Phase::Main;
         }
 
         return true;
     }
 
-    if (sourcePlayer.id != currentPlayer.id)
+    if (sourcePlayer.id != currentPlayer->id)
     {
         return false;
     }
@@ -121,20 +140,20 @@ bool Game::Perform(TurnAction& turnAction)
         return false;
     }
 
-    std::cout << "Performing Turn Action: " << static_cast<int>(turnAction.type) << std::endl;
+    std::cout << "Performing Turn Action: " << std::to_string(turnAction.type) << std::endl;
 
     switch (turnAction.type)
     {
         case TurnAction::Type::PlayCard:
-            return PlayCard(sourcePlayer, turnAction.sourceCard);
+            return PlayCard(sourcePlayer, *turnAction.sourceCard);
         case TurnAction::Type::UseAbility:
-            return UseAbility(turnAction.sourceCard, turnAction.abilityName, turnAction);
+            return UseAbility(*turnAction.sourceCard, *turnAction.abilityName, turnAction);
         case TurnAction::Type::ChallengeCard:
-            return ChallengeCard(sourcePlayer, turnAction.sourceCard, turnAction.targetPlayer, turnAction.targetCard);
+            return ChallengeCard(sourcePlayer, *turnAction.sourceCard, *turnAction.targetPlayer, *turnAction.targetCard);
         case TurnAction::Type::InkCard:
-            return InkCard(sourcePlayer, turnAction.sourceCard);
+            return InkCard(sourcePlayer, *turnAction.sourceCard);
         case TurnAction::Type::QuestCard:
-            return QuestCard(sourcePlayer, turnAction.sourceCard);
+            return QuestCard(sourcePlayer, *turnAction.sourceCard);
         case TurnAction::Type::PassTurn:
             return PassTurn(sourcePlayer);
         default:
@@ -149,29 +168,35 @@ bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard)
         return false;
     }
 
+    // Exert cards in inkwell equal to card cost.
     int numExerted = 0;
     for (auto& inkedCard : sourcePlayer.inkwell)
     {
-        if (inkedCard.isReady)
+        if (!inkedCard.isReady)
         {
-            inkedCard.isReady = false;
-            numExerted += 1;
-            if (numExerted >= sourceCard.cost)
-            {
-                break;
-            }
+            continue;
+        }
+        
+        inkedCard.isReady = false;
+        numExerted += 1;
+        if (numExerted >= sourceCard.cost)
+        {
+            break;
         }
     }
 
-    // sourcePlayer.hand.erase(std::remove(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), sourceCard), sourcePlayer.hand.end());
-    // sourcePlayer.field.push_back(sourceCard);
+    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
+                           { return &card == &sourceCard; });
+
+    sourcePlayer.hand.erase(it);
+    sourcePlayer.field.push_back(sourceCard);
 
     return true;
 }
 
 bool Game::UseAbility(Card& sourceCard, const std::string& abilityName, TurnAction& turnAction)
 {
-    std::string lookupKey = sourceCard.name + "_" + sourceCard.version + "_" + abilityName;
+    std::string lookupKey = sourceCard.baseName + "_" + sourceCard.version + "_" + abilityName;
     if (abilities.count(lookupKey))
     {
         abilities[lookupKey](turnAction);
@@ -182,20 +207,35 @@ bool Game::UseAbility(Card& sourceCard, const std::string& abilityName, TurnActi
 
 bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard)
 {
+    if (&sourcePlayer == &targetPlayer)
+    {
+        return false;
+    }
+    if (&sourceCard == &targetCard)
+    {
+        return false;
+    }
+
     sourceCard.isReady = false;
     sourceCard.damageCounters += targetCard.strength;
     targetCard.damageCounters += sourceCard.strength;
 
     if (sourceCard.damageCounters >= sourceCard.willpower)
     {
-        // sourcePlayer.field.erase(std::remove(sourcePlayer.field.begin(), sourcePlayer.field.end(), sourceCard), sourcePlayer.field.end());
-        // sourcePlayer.discard.push_back(sourceCard);
+        auto it = std::find_if(sourcePlayer.field.begin(), sourcePlayer.field.end(), [&sourceCard](const Card& card)
+                            { return &card == &sourceCard; });
+
+        sourcePlayer.field.erase(it);
+        sourcePlayer.discard.push_back(sourceCard);
     }
 
     if (targetCard.damageCounters >= targetCard.willpower)
     {
-        // targetPlayer.field.erase(std::remove(targetPlayer.field.begin(), targetPlayer.field.end(), targetCard), targetPlayer.field.end());
-        // targetPlayer.discard.push_back(targetCard);
+        auto it = std::find_if(targetPlayer.field.begin(), targetPlayer.field.end(), [&sourceCard](const Card& card)
+                            { return &card == &sourceCard; });
+
+        targetPlayer.field.erase(it);
+        targetPlayer.discard.push_back(targetCard);
     }
 
     return true;
@@ -203,20 +243,31 @@ bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetP
 
 bool Game::InkCard(Player& sourcePlayer, Card& sourceCard)
 {
-    if (!sourceCard.inkable)
+    if (sourcePlayer.inkedThisTurn)
     {
         return false;
     }
 
-    // sourcePlayer.hand.erase(std::remove(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), sourceCard), sourcePlayer.hand.end());
-    // sourcePlayer.inkwell.push_back(sourceCard);
+    if (!sourceCard.inkable)
+    {
+        return false;
+    }
+    
+    // Get card index.
+    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
+                           { return &card == &sourceCard; });
+
+    sourcePlayer.hand.erase(it);
+    sourcePlayer.inkwell.push_back(sourceCard);
+    
+    sourcePlayer.inkedThisTurn = true;
 
     return true;
 }
 
 bool Game::QuestCard(Player& sourcePlayer, Card& sourceCard)
 {
-    if (sourceCard.cardType != CardType::Character || !sourceCard.isReady)
+    if (sourceCard.cardType != CardType::Character || !sourceCard.isReady || !sourceCard.isDry)
     {
         return false;
     }
@@ -234,15 +285,15 @@ bool Game::PassTurn(Player& sourcePlayer)
                            { return player.id == sourcePlayer.id; });
     int playerIndex = std::distance(players.begin(), it);
     int nextIndex = (playerIndex + 1) % players.size();
-    currentPlayer = players.at(nextIndex);
+    currentPlayer = &players.at(nextIndex);
 
     return true;
 }
 
 bool Game::Elsa_SnowQueen_Freeze(TurnAction& turnAction)
 {
-    Card& sourceCard = turnAction.sourceCard;
-    Card& targetCard = turnAction.targetCard;
+    Card& sourceCard = *turnAction.sourceCard;
+    Card& targetCard = *turnAction.targetCard;
 
     if (!sourceCard.isReady)
     {

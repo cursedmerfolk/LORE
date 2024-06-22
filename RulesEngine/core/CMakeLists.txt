@@ -22,7 +22,7 @@ include_directories(/usr/lib/jvm/java-11-openjdk-amd64/include/linux)
 set(CMAKE_SWIG_FLAGS "")
 
 # Header and source files
-include_directories(include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 file(GLOB SOURCES "src/*.cpp")
 
 # Include SWIG module
@@ -40,3 +40,6 @@ find_package(jsoncpp REQUIRED)
 target_link_libraries(game_java jsoncpp_lib)
 # target_link_libraries(game_python jsoncpp_lib)
 target_link_libraries(game_csharp jsoncpp_lib)
+
+# add_subdirectory(tests)
+add_subdirectory(sandbox)

@@ -1,12 +1,17 @@
 #pragma once
 
 #include <algorithm>
+#include <ctime>
+#include <iostream>
 #include <functional>
+#include <fstream>
+#include <random>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "Player.h"
+#include "Util.h"
 
 namespace Lorcana
 {
@@ -17,22 +22,24 @@ class TurnAction
 public:
     enum Type
     {
+        Mulligan,
         PlayCard,
         ChallengeCard,
         InkCard,
         QuestCard,
         UseAbility,
-        PassTurn
+        PassTurn,
     };
 
     Type type;
-    Player sourcePlayer;
-    Card sourceCard;
-    Player targetPlayer;
-    Card targetCard;
-    std::vector<Card> singers;
-    std::string abilityName;
-    std::vector<uint8_t> mulligans;
+    // Pointers feel wrong, not sure how to fix.
+    Player* sourcePlayer;
+    Card* sourceCard;
+    Player* targetPlayer;
+    Card* targetCard;
+    std::vector<Card>* singers;
+    std::string* abilityName;
+    std::vector<uint8_t>* mulligans;
 };
 
 enum Phase
@@ -47,7 +54,7 @@ enum Phase
 class Game
 {
 public:
-    Player currentPlayer;
+    Player* currentPlayer;
     Phase currentPhase = Phase::Mulligan;
     std::vector<Card> cards;
     // std::vector<std::function<void>> bag;
@@ -58,7 +65,7 @@ public:
     ~Game() = default;
     Game(const Game& other) = default;
 
-    Game(const std::vector<std::string>& playerNames);
+    Game(const std::vector<std::string>& playerNames, unsigned int seed = unsigned(std::time(0)));
 
     bool Perform(TurnAction& turnAction);
 
@@ -73,6 +80,8 @@ private:
     bool InkCard(Player& sourcePlayer, Card& sourceCard);
     bool QuestCard(Player& sourcePlayer, Card& sourceCard);
     bool PassTurn(Player& sourcePlayer);
+
+    bool loadCardJson(const std::string& fileName);
 
     // bool ResolveAbility(std::function<void>); // Resolve an ability in the bag.
 };

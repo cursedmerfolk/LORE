@@ -5,7 +5,7 @@ namespace Lorcana
 
 uint8_t Player::currentId = 0;
 
-bool Player::TurnStart()
+bool Player::DoTurnStart(bool doDraw)
 {
     // Ready phase.
     for (Card& card : field)
@@ -19,28 +19,27 @@ bool Player::TurnStart()
         DoSetPhase(card);
     }
 
+    // Misc.
+    inkedThisTurn = false;
+
     // Draw phase.
-    hand.push_back(deck.back());
-    deck.pop_back();
+    if (doDraw)
+    {
+        hand.push_back(deck.back());
+        deck.pop_back();
+    }
 
     return true;
 }
 
 bool Player::CanPlay(const Card& card)
 {
-    int numReadyInk = 0;
-    for (const Card& inkedCard : inkwell)
-    {
-        if (inkedCard.isReady)
-        {
-            numReadyInk += 1;
-        }
-    }
+    auto readyInk = filterBy(inkwell, &Card::isReady, true);
 
-    // 	// TODO: enable once Inkwell is implemented.
-    // 	// if (card.Cost > numReadyInk) {
-    // 	//     return false;
-    // 	// }
+    if (card.cost > readyInk.size())
+    {
+        return false;
+    }
 
     return true;
 }
@@ -69,8 +68,21 @@ bool Player::DoSetPhase(Card& card)
 
     // TODO: Add start of turn effects to the bag.
 
-    //
+    // Misc.
     card.canReady = true;
+
+    return true;
+}
+
+bool Player::DrawCards(uint8_t numCards = 1)
+{
+    // TODO: handle drawing more cards than the deck has.
+
+    for (uint8_t i = 0; i < numCards; ++i)
+    {
+        hand.push_back(deck.back());
+        deck.pop_back();
+    }
 
     return true;
 }

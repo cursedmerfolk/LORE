@@ -6,11 +6,11 @@ namespace Lorcana
 Card::Card(const Json::Value& jsonValue)
 {
     cost = jsonValue["cost"].asInt();
-    name = jsonValue["fullName"].asString();
-    version = jsonValue["code"].asString();
+    fullName = jsonValue["fullName"].asString();
+    baseName = jsonValue["baseName"].asString();
+    version = jsonValue["subtitle"].asString();
     cardType = getCardType(jsonValue["type"].asString());
 
-    bool first = true;
     for (const auto& subtype : jsonValue["subtypes"])
     {
         classifications.push_back(getClassification(subtype.asString()));

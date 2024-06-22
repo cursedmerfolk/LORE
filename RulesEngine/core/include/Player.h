@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Card.h"
+#include "Util.h"
 
 namespace Lorcana
 {
@@ -28,13 +29,15 @@ public:
 
     // Misc
     bool doneMulligan{false};
+    bool inkedThisTurn{false};
 
     static uint8_t currentId;
 
-    bool TurnStart();
+    bool DoTurnStart(bool doDraw = true);
     bool CanPlay(const Card& card);
     bool DoReadyPhase(Card& card);
     bool DoSetPhase(Card& card);
+    bool DrawCards(uint8_t numCards);
 };
 
 }  // namespace Lorcana

@@ -2,6 +2,7 @@
 
 #include <json/json.h>
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -73,7 +74,8 @@ class Card
 public:
     // Main attributes.
     uint8_t cost;
-    std::string name;
+    std::string fullName;
+    std::string baseName;
     std::string version;
     CardType cardType;
     std::vector<Classification> classifications;
@@ -84,8 +86,8 @@ public:
     std::string cardText;
     Rarity rarity;
     uint8_t damageCounters;
-    bool isReady;
-    bool isDry = false;
+    bool isReady{true};
+    bool isDry{false};
 
     // Other attributes.
     bool canReady = true;
