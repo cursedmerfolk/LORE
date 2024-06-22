@@ -22,6 +22,7 @@ Card::Card(const Json::Value& jsonValue)
     inkable = jsonValue["inkwell"].asBool();
     cardText = jsonValue["fullText"].asString();
     rarity = getRarity(jsonValue["rarity"].asString());
+    color = getColor(jsonValue["color"].asString());
 }
 
 CardType getCardType(const std::string& typeStr)
@@ -79,6 +80,18 @@ Rarity getRarity(const std::string& rarityStr)
     if (rarityStr == "Enchanted") return Rarity::Enchanted;
     if (rarityStr == "Special") return Rarity::Special;
     throw std::invalid_argument("Invalid rarity: " + rarityStr);
+}
+
+CardColor getColor(const std::string& colorStr)
+{
+    if (colorStr == "Amber") return CardColor::Amber;
+    if (colorStr == "Amethyst") return CardColor::Amethyst;
+    if (colorStr == "Emerald") return CardColor::Emerald;
+    if (colorStr == "Ruby") return CardColor::Ruby;
+    if (colorStr == "Sapphire") return CardColor::Sapphire;
+    if (colorStr == "Steel") return CardColor::Steel;
+    if (colorStr == "") return CardColor::Unknown;
+    throw std::invalid_argument("Invalid color: " + colorStr);
 }
 
 }  // namespace Lorcana

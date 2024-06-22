@@ -22,13 +22,13 @@ class TurnAction
 public:
     enum Type
     {
-        Mulligan,
-        PlayCard,
         ChallengeCard,
         InkCard,
+        Mulligan,
+        PassTurn,
+        PlayCard,
         QuestCard,
         UseAbility,
-        PassTurn
     };
 
     Type type;
@@ -40,6 +40,18 @@ public:
     std::vector<Card>* singers;
     std::string* abilityName;
     std::vector<uint8_t>* mulligans;
+
+    std::string getTypeString()
+    {
+        if (type == Type::ChallengeCard) return "ChallengeCard";
+        if (type == Type::InkCard) return "InkCard";
+        if (type == Type::Mulligan) return "Mulligan";
+        if (type == Type::PassTurn) return "PassTurn";
+        if (type == Type::PlayCard) return "PlayCard";
+        if (type == Type::QuestCard) return "QuestCard";
+        if (type == Type::UseAbility) return "UseAbility";
+        return "Unknown";
+    }
 };
 
 enum Phase

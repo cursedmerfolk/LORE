@@ -12,6 +12,10 @@ bool Player::DoTurnStart(bool doDraw)
     {
         DoReadyPhase(card);
     }
+    for (Card& card : inkwell)
+    {
+        DoReadyPhase(card);
+    }
 
     // Set phase.
     for (Card& card : field)

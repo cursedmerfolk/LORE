@@ -83,6 +83,7 @@ bool ChallengeCard(void* gamePtr, const char* playerName1, int cardIndex1, const
     turnAction.sourceCard = &sourceCard;
     turnAction.targetPlayer = &targetPlayer;
     turnAction.targetCard = &targetCard;
+
     return game->Perform(turnAction);
 }
 

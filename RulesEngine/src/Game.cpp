@@ -140,7 +140,7 @@ bool Game::Perform(TurnAction& turnAction)
         return false;
     }
 
-    std::cout << "Performing Turn Action: " << std::to_string(turnAction.type) << std::endl;
+    std::cout << "Performing Turn Action: " << turnAction.getTypeString() << std::endl;
 
     switch (turnAction.type)
     {
@@ -218,11 +218,26 @@ bool Game::UseAbility(Card& sourceCard, const std::string& abilityName, TurnActi
 
 bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard)
 {
+    // Characters can't challenge friendly characters.
     if (&sourcePlayer == &targetPlayer)
     {
         return false;
     }
-    if (&sourceCard == &targetCard)
+
+    // Only characters can challenge.
+    if (sourceCard.cardType != CardType::Character)
+    {
+        return false;
+    }
+
+    // Only characters and locations can be challenged.
+    if (targetCard.cardType != CardType::Character && targetCard.cardType != CardType::Location)
+    {
+        return false;
+    }
+
+    // Characters can't attack unless they're dry.
+    if (!sourceCard.isDry)
     {
         return false;
     }
@@ -233,20 +248,23 @@ bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetP
 
     if (sourceCard.damageCounters >= sourceCard.willpower)
     {
+        sourcePlayer.discard.push_back(sourceCard);
         auto it = std::find_if(sourcePlayer.field.begin(), sourcePlayer.field.end(), [&sourceCard](const Card& card)
                             { return &card == &sourceCard; });
 
         sourcePlayer.field.erase(it);
-        sourcePlayer.discard.push_back(sourceCard);
     }
 
+    std::cout << targetCard.fullName << std::endl;
+    std::cout << std::to_string(targetCard.damageCounters) << std::endl;
+    std::cout << std::to_string(targetCard.willpower) << std::endl;
     if (targetCard.damageCounters >= targetCard.willpower)
     {
+        targetPlayer.discard.push_back(targetCard);
         auto it = std::find_if(targetPlayer.field.begin(), targetPlayer.field.end(), [&sourceCard](const Card& card)
                             { return &card == &sourceCard; });
 
         targetPlayer.field.erase(it);
-        targetPlayer.discard.push_back(targetCard);
     }
 
     return true;
@@ -297,6 +315,11 @@ bool Game::PassTurn(Player& sourcePlayer)
     int playerIndex = std::distance(players.begin(), it);
     int nextIndex = (playerIndex + 1) % players.size();
     currentPlayer = &players.at(nextIndex);
+
+    currentPlayer->DoTurnStart();
+    currentPhase = Phase::Main;
+
+    std::cout << "Current player: " << currentPlayer->name << std::endl;
 
     return true;
 }
