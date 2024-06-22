@@ -6,7 +6,7 @@
 
 int main() {
 
-    Lorcana::Game* game = (Lorcana::Game*)Game_Create_Seed("playerName1", "playerName2", 1234);
+    Lorcana::Game* game = (Lorcana::Game*)Game_Create_Seeded("playerName1", "playerName2", 1234);
     Lorcana::Player& player1 = game->players.at(0);
     Lorcana::Player& player2 = game->players.at(1);
 
@@ -67,7 +67,22 @@ int main() {
     assert(player1.hand.size() == 6);
     assert(!PlayCard(game, "playerName1", 0));  // Cost 4
     assert(PlayCard(game, "playerName1", 3));  // Cost 1
+    assert(player1.discard.at(0).fullName == "It Calls Me");
     assert(!InkCard(game, "playerName1", 0));  // Already inked.
     assert(!QuestCard(game, "playerName1", 0));  // Not dry.
+
+    assert(!PassTurn(game, "playerName2"));
+    assert(PassTurn(game, "playerName1"));
+    assert(game->currentPlayer == &player2);
+
+
+    // Player 2 turn
+    assert(!InkCard(game, "playerName1", 0));
+    assert(InkCard(game, "playerName2", 0));
+
+
+    // assert(!ChallengeCard(game, "playerName1", 0, "playerName1", 0));
+    // assert(!ChallengeCard(game, "playerName1", 0, "playerName2", 0));
+
 
 }

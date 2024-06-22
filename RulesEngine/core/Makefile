@@ -25,7 +25,7 @@ test:
 	cd ../..
 	mkdir -p build && \
 	cd build && \
-	cmake .. && \
+	cmake -DDO_TESTS=ON .. && \
 	make && \
 	cd ..
 

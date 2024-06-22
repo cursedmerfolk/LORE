@@ -28,7 +28,7 @@ public:
         InkCard,
         QuestCard,
         UseAbility,
-        PassTurn,
+        PassTurn
     };
 
     Type type;

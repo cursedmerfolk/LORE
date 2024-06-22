@@ -188,8 +188,19 @@ bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard)
     auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
                            { return &card == &sourceCard; });
 
+    if (sourceCard.cardType == CardType::Action)
+    {
+        sourcePlayer.discard.push_back(sourceCard);
+    }
+    else
+    {
+        sourcePlayer.field.push_back(sourceCard);
+    }
+
+    // TODO: ETB effects
+    // Probably generic 'check game state'
+
     sourcePlayer.hand.erase(it);
-    sourcePlayer.field.push_back(sourceCard);
 
     return true;
 }
@@ -252,15 +263,15 @@ bool Game::InkCard(Player& sourcePlayer, Card& sourceCard)
     {
         return false;
     }
-    
-    // Get card index.
-    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
-                           { return &card == &sourceCard; });
 
-    sourcePlayer.hand.erase(it);
     sourcePlayer.inkwell.push_back(sourceCard);
     
     sourcePlayer.inkedThisTurn = true;
+
+    // Get card index.
+    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
+                           { return &card == &sourceCard; });
+    sourcePlayer.hand.erase(it);
 
     return true;
 }
