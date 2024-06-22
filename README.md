@@ -18,7 +18,8 @@ This is currently a project that runs in Godot, but the RulesEngine library shou
  - Install the dev containers vscode extension.
  - Open the vscode command pallete (F1 on windows) and select 'Reopen in Container'
  - The container should open with everything needed to build the project.
- - `cd RulesEngine/core/` and run `make json_cpp` once, then `make windows` subsequently to build changes.
+ - `cd RulesEngine/core/` and run `make json_cpp` once, then `make test` subsequently to build and test changes.
+ - `make windows` will build the .dll files for windows.
 
 ## Desired Features
 
