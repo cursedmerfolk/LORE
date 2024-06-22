@@ -12,4 +12,4 @@ target_link_libraries(run_gtests asan gtest gtest_main jsoncpp_lib)
 
 add_custom_command(TARGET run_gtests POST_BUILD COMMAND run_gtests --output-on-failure --gmock_verbose=info --gtest_stack_trace_depth=10)
 
-# file(COPY ../../../allCards.json ../)
+# file(COPY ../../allCards.json ../)
