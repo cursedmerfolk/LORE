@@ -1,1 +1,2 @@
-RulesEngine/core/build
+RulesEngine/build
+RulesEngine/jsoncpp/*

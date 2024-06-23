@@ -69,7 +69,7 @@ int main() {
     assert(PlayCard(game, "playerName1", 4));     // It Calls Me
     assert(player1.discard.at(0).fullName == "It Calls Me");
     assert(!InkCard(game, "playerName1", 0));     // Already inked.
-    assert(!QuestCard(game, "playerName1", 0));   // Not dry.
+    assert(!QuestCard(game, "playerName1", 0));   // Nothing at position 0.
 
 
     assert(player2.hand.size() == 7);
@@ -110,6 +110,7 @@ int main() {
     assert(!PlayCard(game, "playerName1", 0));    // LeFou - Bumbler
     assert(InkCard(game, "playerName1", 1));
     assert(PlayCard(game, "playerName1", 0));     // LeFou - Bumbler
+    assert(!QuestCard(game, "playerName1", 0));   // LeFou - Bumbler is not Dry.
     assert(player1.hand.size() == 4);
     assert(!ChallengeCard(game, "playerName1", 0, "playerName2", 0));  // Nothing on player 2 field.
     assert(!ChallengeCard(game, "playerName2", 0, "playerName1", 0));  // Nothing on player 2 field.
@@ -133,9 +134,38 @@ int main() {
     assert(player1.field.size() == 0);    // Lefou in discard
     assert(player1.discard.size() == 2);  // Lefou and How Far I'll Go in discard
 
-    for (auto& card : player1.hand)
-    {
-        std::cout << card.fullName << std::endl;
-    }
+    // Add a location to player1 hand for testing.
+    Lorcana::Card motunui = filterBy(game->cards, &Lorcana::Card::fullName, std::string("Motunui - Island Paradise")).at(0);
+    player1.hand.push_back(motunui);
+    assert(PlayCard(game, "playerName1", 4));  // Motunui - Island Paradise
+    assert(PassTurn(game, "playerName1"));
+
+    // Player 2 turn
+    assert(ChallengeCard(game, "playerName2", 0, "playerName1", 0));
+    assert(player1.field.size() == 1);
+    assert(player2.field.size() == 1);
+    assert(player2.field.at(0).isReady == false);  // HeiHei - Accidental Explorer (3/2)
+    assert(!ChallengeCard(game, "playerName2", 0, "playerName1", 0));  // HeiHei is exerted.
+    assert(!QuestCard(game, "playerName2", 0));                        // HeiHei is exerted.
+    assert(PassTurn(game, "playerName2"));
+
+    // Player 1 turn
+    assert(player1.loreTotal == 1);  // Gained from Motunui
+    assert(PassTurn(game, "playerName1"));
+
+    // Player 2 turn
+    assert(ChallengeCard(game, "playerName2", 0, "playerName1", 0));
+    assert(player1.field.size() == 0);   // Motunui discarded.
+    assert(player1.discard.size() == 3); // Motunui discarded.
+    assert(player1.discard.at(2).fullName == "Motunui - Island Paradise"); // Motunui discarded.
+    assert(player2.field.size() == 1);  // HeiHei - Accidental Explorer (3/2)
+
+
+    // for (auto& card : player1.hand)
+    // {
+    //     std::cout << card.fullName << std::endl;
+    // }
+
+    // 
 
 }

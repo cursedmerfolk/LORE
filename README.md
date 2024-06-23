@@ -1,5 +1,5 @@
 
-# **L**\<redacted\> **O**pensource **R**ules **E**ngine
+# **L**\<redacted\> **O**pen **R**ules **E**ngine
 
 ## Summary
 

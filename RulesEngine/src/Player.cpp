@@ -50,6 +50,7 @@ bool Player::CanPlay(const Card& card)
 
 bool Player::DoReadyPhase(Card& card)
 {
+    // TODO: these need moved up a level, game.currentPhase needs to be set to main afterwards.
     // TODO: Effects that would end "at the start of your turn" and "at the start of your next turn" end.
 
     if (card.canReady)

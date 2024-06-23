@@ -17,7 +17,7 @@ std::vector<CLASS> filterBy(
     std::function<bool(const TYPE& a, const TYPE& b)> compare = [](const TYPE& a, const TYPE& b) { return a == b; }
  ) {
     std::vector<CLASS> found;
-    for (const CLASS& instance : instances) {
+    for (auto& instance : instances) {
         if (instance.*property == value) {
             found.push_back(instance);
         }

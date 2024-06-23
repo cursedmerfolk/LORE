@@ -11,3 +11,6 @@ sudo apt install -y clang-format
 sudo apt install -y make
 sudo apt install -y cmake
 sudo apt install -y pkg-config
+# sudo apt install -y node-js
+# sudo apt install -y npm
+# sudo npm install -y -g cmake-js

@@ -13,6 +13,9 @@ find_package(Python COMPONENTS Development)
 # Include directories for Python
 include_directories(${Python_INCLUDE_DIRS})
 
+include_directories(${CMAKE_JS_INC})
+link_directories(${CMAKE_JS_LIB})
+
 # SWIG module
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
@@ -43,12 +46,24 @@ else()
 
     # Include SWIG module
     set_source_files_properties(wrapper.i PROPERTIES CPLUSPLUS ON)
-    swig_add_library(game_java LANGUAGE java SOURCES wrapper.i ${SOURCES})
-    # swig_add_library(game_python LANGUAGE python SOURCES wrapper.i ${SOURCES})
-    swig_add_library(game_csharp LANGUAGE csharp SOURCES wrapper.i ${SOURCES})
 
+    # Add SWIG Java module
+    swig_add_library(game_java LANGUAGE java SOURCES wrapper.i ${SOURCES})
     target_link_libraries(game_java jsoncpp_lib)
-    # target_link_libraries(game_python jsoncpp_lib)
+
+    # Add SWIG CSharp module
+    swig_add_library(game_csharp LANGUAGE csharp SOURCES wrapper.i ${SOURCES})
     target_link_libraries(game_csharp jsoncpp_lib)
+
+    # Doesn't work on Windows.
+    # swig_add_library(game_python LANGUAGE python SOURCES wrapper.i ${SOURCES})
+    # target_link_libraries(game_python jsoncpp_lib)
+
+    # Add SWIG JavaScript module
+    # Can't get node-gyp or cmake-js to work.
+    # set_source_files_properties(wrapper.i PROPERTIES SWIG_FLAGS "-node")
+    # swig_add_library(game_js LANGUAGE javascript SOURCES wrapper.i ${SOURCES})
+    # target_include_directories(game_js PRIVATE ${CMAKE_JS_INC})
+    # target_link_libraries(game_js ${CMAKE_JS_LIB} jsoncpp_lib)
 
 endif()

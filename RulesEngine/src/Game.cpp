@@ -198,7 +198,9 @@ bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard)
     }
 
     // TODO: ETB effects
-    // Probably generic 'check game state'
+    // Add that effect to the bag since it's a triggered ability (I think).
+    // There likely needs to be a step that says 'if there's only one Ability in the bag, perform it without waiting'
+    // Probably need Ability (type=Triggered, sourcePlayer, bool Perform())
 
     sourcePlayer.hand.erase(it);
 
@@ -236,8 +238,8 @@ bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetP
         return false;
     }
 
-    // Characters can't attack unless they're dry.
-    if (!sourceCard.isDry)
+    // Characters can't attack unless they're Dry and Ready.
+    if (!sourceCard.isDry || !sourceCard.isReady)
     {
         return false;
     }
@@ -255,9 +257,6 @@ bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetP
         sourcePlayer.field.erase(it);
     }
 
-    std::cout << targetCard.fullName << std::endl;
-    std::cout << std::to_string(targetCard.damageCounters) << std::endl;
-    std::cout << std::to_string(targetCard.willpower) << std::endl;
     if (targetCard.damageCounters >= targetCard.willpower)
     {
         targetPlayer.discard.push_back(targetCard);
