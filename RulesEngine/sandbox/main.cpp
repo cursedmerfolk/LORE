@@ -161,6 +161,9 @@ int main() {
     assert(player2.field.size() == 1);  // HeiHei - Accidental Explorer (3/2)
 
 
+    // TODO: Evasive and Rush.
+    // Probably just make standalone tests.
+
     // for (auto& card : player1.hand)
     // {
     //     std::cout << card.fullName << std::endl;

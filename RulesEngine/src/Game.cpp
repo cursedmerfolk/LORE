@@ -238,8 +238,20 @@ bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetP
         return false;
     }
 
-    // Characters can't attack unless they're Dry and Ready.
-    if (!sourceCard.isDry || !sourceCard.isReady)
+    // If the target is Evasive, this card must also have Evasive to challenge it.    
+    if (targetCard.hasEvasive && !sourceCard.hasEvasive)
+    {
+        return false;
+    }
+
+    // Characters can't attack unless they're Ready.
+    if (!sourceCard.isReady)
+    {
+        return false;
+    }
+
+    // Characters can't attack unless they're Dry or have Rush.
+    if (!sourceCard.isDry && !sourceCard.hasRush)
     {
         return false;
     }

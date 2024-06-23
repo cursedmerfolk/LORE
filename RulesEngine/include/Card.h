@@ -3,6 +3,7 @@
 #include <json/json.h>
 
 #include <iostream>
+#include <regex>
 #include <string>
 #include <vector>
 
@@ -91,22 +92,15 @@ public:
      * When a card travels from one zone to another, it functionally becomes a new card.
      * 
      * Things like damageCounters, isReady, isDry etc get reset.
+     * 
+     * NOTE: vector.push_back() calls this constructor (unless you do std::move(), iirc).
     */
-    Card(const Card& other) : cost(other.cost),
-                                fullName(other.fullName),
-                                baseName(other.baseName),
-                                version(other.version),
-                                cardType(other.cardType),
-                                classifications(other.classifications),
-                                strength(other.strength),
-                                willpower(other.willpower),
-                                lore(other.lore),
-                                inkable(other.inkable),
-                                cardText(other.cardText),
-                                rarity(other.rarity),
-                                color(other.color) { };
+    Card(const Card& other);
 
     Card(const Json::Value& jsonValue);
+
+    /* Initialize values like hasEvasive, hasRush, etc. */
+    bool parseCardText();
 
     // Main attributes.
     uint8_t cost;
@@ -119,17 +113,22 @@ public:
     uint8_t willpower;
     uint8_t lore;
     bool inkable;
-    std::string cardText;
+    std::vector<std::string> abilitiesText;
     Rarity rarity;
     CardColor color;
 
     // Other attributes.
     // Note - these must be initialized to avoid undefined behavior.
     uint8_t damageCounters{0};
+    uint8_t resistValue{0};
     bool isReady{true};
     bool isDry{false};
     bool canReady{true};
     bool isVisible{true};
+    bool hasRush{false};
+    bool hasEvasive{false};
+    bool hasWard{false};
+
 };
 
 }  // namespace Lorcana

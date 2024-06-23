@@ -3,6 +3,23 @@
 namespace Lorcana
 {
 
+Card::Card(const Card& other) : cost(other.cost),
+                                fullName(other.fullName),
+                                baseName(other.baseName),
+                                version(other.version),
+                                cardType(other.cardType),
+                                classifications(other.classifications),
+                                strength(other.strength),
+                                willpower(other.willpower),
+                                lore(other.lore),
+                                inkable(other.inkable),
+                                abilitiesText(other.abilitiesText),
+                                rarity(other.rarity),
+                                color(other.color)
+{
+    parseCardText();
+};
+
 Card::Card(const Json::Value& jsonValue)
 {
     cost = jsonValue["cost"].asInt();
@@ -20,9 +37,50 @@ Card::Card(const Json::Value& jsonValue)
     willpower = jsonValue["willpower"].asInt();
     lore = jsonValue["lore"].asInt();
     inkable = jsonValue["inkwell"].asBool();
-    cardText = jsonValue["fullText"].asString();
+    for (const auto& ability : jsonValue["abilities"])
+    {
+        abilitiesText.push_back(ability.asString());
+    }
     rarity = getRarity(jsonValue["rarity"].asString());
     color = getColor(jsonValue["color"].asString());
+
+    parseCardText();
+}
+
+// TODO: move this to a script that will create some sort of config that's loaded, so that it's faster.
+bool Card::parseCardText()
+{
+    std::smatch match;
+
+    for (std::string& abilityText : abilitiesText)
+    {
+        std::regex re("^Rush ");
+        if (std::regex_search(abilityText, match, re))
+        {
+            hasRush = true;
+        }
+
+        re = std::regex("^Evasive ");
+        if (std::regex_search(abilityText, match, re))
+        {
+            hasEvasive = true;
+        }
+
+        re = std::regex("^Ward ");
+        if (std::regex_search(abilityText, match, re))
+        {
+            hasWard = true;
+        }
+
+        // Check for Resist +N
+        re = std::regex("^Resist \\+(\\d+)");
+        if (std::regex_search(abilityText, match, re))
+        {
+            resistValue = std::stoi(match[1]);
+        }
+    }
+
+    return true;
 }
 
 CardType getCardType(const std::string& typeStr)
