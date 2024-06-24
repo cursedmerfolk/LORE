@@ -175,6 +175,39 @@ bool PassTurn(void* gamePtr, const char* playerName)
     return game->Perform(turnAction);
 }
 
+bool MoveToLocation(void* gamePtr, const char* playerName, int cardIndex, int locationIndex)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
+                           { return player.name == playerName; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.field.at(locationIndex);
+
+    if (locationIndex >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& targetCard = sourcePlayer.field.at(cardIndex);
+
+    TurnAction turnAction;
+    turnAction.type = TurnAction::Type::MoveToLocation;
+    turnAction.sourcePlayer = &sourcePlayer;
+    turnAction.sourceCard = &sourceCard;
+    turnAction.targetCard = &targetCard;
+    return game->Perform(turnAction);
+}
+
 bool CanPlay(void* gamePtr, const char* playerName, int cardIndex)
 {
     Game* game = (Game*)gamePtr;
@@ -304,4 +337,53 @@ bool CanChoose(void* gamePtr, const char* playerName1, int cardIndex1, const cha
     Card& targetCard = targetPlayer.field.at(cardIndex2);
 
     return game->CanChoose(sourcePlayer, sourceCard, targetPlayer, targetCard);
+}
+
+bool CanQuest(void* gamePtr, const char* playerName, int cardIndex)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
+                           { return player.name == playerName; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.field.at(cardIndex);
+
+    return game->CanQuest(sourcePlayer, sourceCard);
+}
+
+bool CanMove(void* gamePtr, const char* playerName, int cardIndex, int locationIndex)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
+                           { return player.name == playerName; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.field.at(cardIndex);
+
+    if (locationIndex >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& targetCard = sourcePlayer.field.at(locationIndex);
+
+    return sourcePlayer.CanMove(sourceCard, targetCard);
 }

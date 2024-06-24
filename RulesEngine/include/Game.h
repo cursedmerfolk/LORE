@@ -24,6 +24,7 @@ public:
     {
         ChallengeCard,
         InkCard,
+        MoveToLocation,
         Mulligan,
         PassTurn,
         PlayCard,
@@ -81,6 +82,7 @@ public:
     bool CanChallenge(Player& sourcePlayer, Card& sourceCard);
     bool CanChallengeTarget(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard);
     bool CanChoose(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard);
+    bool CanQuest(Player& sourcePlayer, Card& sourceCard);  // TODO: not tested
 
     // Implementations of card abilities (Name_Version_AbilityName).
     static bool Elsa_SnowQueen_Freeze(TurnAction& turnAction);
@@ -99,6 +101,7 @@ private:
     bool InkCard(Player& sourcePlayer, Card& sourceCard);
     bool QuestCard(Player& sourcePlayer, Card& sourceCard);
     bool PassTurn(Player& sourcePlayer);
+    bool MoveToLocation(Player& sourcePlayer, Card& sourceCard, Card& targetCard);  // TODO: not tested
 
     bool loadCardJson(const std::string& fileName);
 

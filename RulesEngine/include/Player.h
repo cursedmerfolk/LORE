@@ -34,8 +34,10 @@ public:
     static uint8_t currentId;
 
     bool DoTurnStart(bool doDraw = true);
+    bool DoTurnEnd();
     bool CanPlay(const Card& card);
     bool CanInk(const Card& card);
+    bool CanMove(const Card& character, const Card& location);  // TODO: not tested
     bool DoReadyPhase(Card& card);
     bool DoSetPhase(Card& card);
     bool DrawCards(uint8_t numCards);

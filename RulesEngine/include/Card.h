@@ -111,13 +111,18 @@ public:
     std::string version;
     CardType cardType;
     std::vector<Classification> classifications;
-    uint8_t strength;
+    union  // strength for Characters, moveCost for Locations
+    {
+        uint8_t strength;
+        uint8_t moveCost;
+    };
     uint8_t willpower;
     uint8_t lore;
     bool inkable;
     std::vector<std::string> abilitiesText;
     Rarity rarity;
     CardColor color;
+    Card* atLocation;
 
     // Other attributes.
     // Note - these must be initialized to avoid undefined behavior.
@@ -127,7 +132,8 @@ public:
     uint8_t shiftValue{0};
     bool isReady{true};
     bool isDry{false};
-    bool canReady{true};
+    bool canReadyThisTurn{true};
+    bool canQuestThisTurn{true};
     bool isVisible{true};
     bool hasRush{false};
     bool hasEvasive{false};

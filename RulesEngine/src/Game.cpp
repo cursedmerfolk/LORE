@@ -156,6 +156,8 @@ bool Game::Perform(TurnAction& turnAction)
             return QuestCard(sourcePlayer, *turnAction.sourceCard);
         case TurnAction::Type::PassTurn:
             return PassTurn(sourcePlayer);
+        case TurnAction::Type::MoveToLocation:
+            return MoveToLocation(sourcePlayer, *turnAction.sourceCard, *turnAction.targetCard);
         default:
             return false;
     }
@@ -279,9 +281,9 @@ bool Game::InkCard(Player& sourcePlayer, Card& sourceCard)
 
 bool Game::QuestCard(Player& sourcePlayer, Card& sourceCard)
 {
-    if (sourceCard.cardType != CardType::Character || !sourceCard.isReady || !sourceCard.isDry)
+    if (!CanQuest(sourcePlayer, sourceCard))
     {
-        return false;
+        return false;        
     }
 
     sourceCard.isReady = false;
@@ -292,6 +294,8 @@ bool Game::QuestCard(Player& sourcePlayer, Card& sourceCard)
 
 bool Game::PassTurn(Player& sourcePlayer)
 {
+    currentPlayer->DoTurnEnd();
+
     // Find player by ID.
     auto it = std::find_if(players.begin(), players.end(), [&sourcePlayer](const Player& player)
                            { return player.id == sourcePlayer.id; });
@@ -303,6 +307,37 @@ bool Game::PassTurn(Player& sourcePlayer)
     currentPhase = Phase::Main;
 
     std::cout << "Current player: " << currentPlayer->name << std::endl;
+
+    return true;
+}
+
+
+bool Game::MoveToLocation(Player& sourcePlayer, Card& sourceCard, Card& targetCard)
+{
+    if (!sourcePlayer.CanMove(sourceCard, targetCard))
+    {
+        return false;
+    }
+
+    // Exert cards in inkwell equal to location's move cost.
+    uint8_t numExerted = 0;
+    for (auto& inkedCard : sourcePlayer.inkwell)
+    {
+        if (!inkedCard.isReady)
+        {
+            continue;
+        }
+        
+        inkedCard.isReady = false;
+        numExerted += 1;
+        if (numExerted >= targetCard.moveCost)
+        {
+            break;
+        }
+    }
+
+    // Move character to location.
+    sourceCard.atLocation = &targetCard;
 
     return true;
 }
@@ -378,6 +413,22 @@ bool Game::CanChoose(Player& sourcePlayer, Card& sourceCard, Player& targetPlaye
 
     // Cards with Ward can't be chosen.
     if (targetCard.hasWard)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Game::CanQuest(Player& sourcePlayer, Card& sourceCard)
+{
+    // Used by Isabella Madrigal
+    if (!sourceCard.canQuestThisTurn)
+    {
+        return false;
+    }
+
+    if (sourceCard.cardType != CardType::Character || !sourceCard.isReady || !sourceCard.isDry)
     {
         return false;
     }

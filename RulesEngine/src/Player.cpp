@@ -36,6 +36,16 @@ bool Player::DoTurnStart(bool doDraw)
     return true;
 }
 
+bool Player::DoTurnEnd()
+{
+    for (Card& card : field)
+    {
+        card.canQuestThisTurn = true;
+    }
+
+    return true;
+}
+
 bool Player::CanPlay(const Card& card)
 {
     auto const& readyInk = filterBy(inkwell, &Card::isReady, true);
@@ -77,12 +87,24 @@ bool Player::CanInk(const Card& card)
     return true;
 }
 
+bool Player::CanMove(const Card& character, const Card& location)
+{
+    auto const& readyInk = filterBy(inkwell, &Card::isReady, true);
+
+    if (location.strength > readyInk.size())
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool Player::DoReadyPhase(Card& card)
 {
     // TODO: these need moved up a level, game.currentPhase needs to be set to main afterwards.
     // TODO: Effects that would end "at the start of your turn" and "at the start of your next turn" end.
 
-    if (card.canReady)
+    if (card.canReadyThisTurn)
     {
         card.isReady = true;
     }
@@ -103,7 +125,7 @@ bool Player::DoSetPhase(Card& card)
     // TODO: Add start of turn effects to the bag.
 
     // Misc.
-    card.canReady = true;
+    card.canReadyThisTurn = true;
 
     return true;
 }

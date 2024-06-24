@@ -23,6 +23,7 @@ extern "C"
     bool QuestCard(void* gamePtr, const char* playerName, int cardIndex);
     bool Mulligan(void* gamePtr, const char* playerName, int* cardIndices, int arrayLength);
     bool PassTurn(void* gamePtr, const char* playerName);
+    bool MoveToLocation(void* gamePtr, const char* playerName, int cardIndex, int locationIndex);
 
     // Used by UI's to signify actions that are / aren't allowed.
     bool CanPlay(void* gamePtr, const char* playerName, int cardIndex);  // TODO: untested
@@ -30,6 +31,8 @@ extern "C"
     bool CanChallenge(void* gamePtr, const char* playerName, int cardIndex);  // TODO: untested
     bool CanChallengeTarget(void* gamePtr, const char* playerName1, int cardIndex1, const char* playerName2, int cardIndex2);  // TODO: untested
     bool CanChoose(void* gamePtr, const char* playerName1, int cardIndex1, const char* playerName2, int cardIndex2);  // TODO: untested
+    bool CanQuest(void* gamePtr, const char* playerName, int cardIndex);  // TODO: untested
+    bool CanMove(void* gamePtr, const char* playerName, int cardIndex, int locationIndex);  // TODO: untested
 
 #ifdef __cplusplus
 }

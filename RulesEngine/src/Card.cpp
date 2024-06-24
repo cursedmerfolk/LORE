@@ -15,7 +15,8 @@ Card::Card(const Card& other) : cost(other.cost),
                                 inkable(other.inkable),
                                 abilitiesText(other.abilitiesText),
                                 rarity(other.rarity),
-                                color(other.color)
+                                color(other.color),
+                                atLocation(other.atLocation)
 {
     parseCardText();
 };
@@ -33,7 +34,15 @@ Card::Card(const Json::Value& jsonValue)
         classifications.push_back(getClassification(subtype.asString()));
     }
 
-    strength = jsonValue["strength"].asInt();
+    if (cardType == CardType::Location)
+    {
+        moveCost = jsonValue["moveCost"].asInt();
+    }
+    else if (cardType == CardType::Character)
+    {  
+        strength = jsonValue["strength"].asInt();
+    }
+
     willpower = jsonValue["willpower"].asInt();
     lore = jsonValue["lore"].asInt();
     inkable = jsonValue["inkwell"].asBool();
