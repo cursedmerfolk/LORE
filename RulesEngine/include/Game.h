@@ -40,6 +40,7 @@ public:
     std::vector<Card>* singers;
     std::string* abilityName;
     std::vector<uint8_t>* mulligans;
+    Card* shiftTarget;
 
     std::string getTypeString()
     {
@@ -66,6 +67,24 @@ enum Phase
 class Game
 {
 public:
+    Game() = default;
+
+    ~Game() = default;
+
+    Game(const Game& other) = default;
+
+    Game(const std::vector<std::string>& playerNames, unsigned int seed = unsigned(std::time(0)));
+
+    bool Perform(TurnAction& turnAction);
+
+    // Used by the wrapper to signify to the UI about actions that are / aren't allowed.
+    bool CanChallenge(Player& sourcePlayer, Card& sourceCard);
+    bool CanChallengeTarget(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard);
+    bool CanChoose(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard);
+
+    // Implementations of card abilities (Name_Version_AbilityName).
+    static bool Elsa_SnowQueen_Freeze(TurnAction& turnAction);
+
     Player* currentPlayer;
     Phase currentPhase = Phase::Mulligan;
     std::vector<Card> cards;
@@ -73,22 +92,10 @@ public:
     std::vector<Player> players;
     std::unordered_map<std::string, std::function<bool(TurnAction&)>> abilities;
 
-    Game() = default;
-    ~Game() = default;
-    Game(const Game& other) = default;
-
-    Game(const std::vector<std::string>& playerNames, unsigned int seed = unsigned(std::time(0)));
-
-    bool Perform(TurnAction& turnAction);
-
-    static bool Elsa_SnowQueen_Freeze(TurnAction& turnAction);
-
 private:
-    bool PlayCard(Player& sourcePlayer, Card& sourceCard);
-    bool UseAbility(Card& sourceCard, const std::string& abilityName,
-                    TurnAction& turnAction);
-    bool ChallengeCard(Player& sourcePlayer, Card& sourceCard,
-                       Player& targetPlayer, Card& targetCard);
+    bool PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget = nullptr);
+    bool UseAbility(Card& sourceCard, const std::string& abilityName, TurnAction& turnAction);
+    bool ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard);
     bool InkCard(Player& sourcePlayer, Card& sourceCard);
     bool QuestCard(Player& sourcePlayer, Card& sourceCard);
     bool PassTurn(Player& sourcePlayer);

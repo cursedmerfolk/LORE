@@ -145,7 +145,7 @@ bool Game::Perform(TurnAction& turnAction)
     switch (turnAction.type)
     {
         case TurnAction::Type::PlayCard:
-            return PlayCard(sourcePlayer, *turnAction.sourceCard);
+            return PlayCard(sourcePlayer, *turnAction.sourceCard, turnAction.shiftTarget);
         case TurnAction::Type::UseAbility:
             return UseAbility(*turnAction.sourceCard, *turnAction.abilityName, turnAction);
         case TurnAction::Type::ChallengeCard:
@@ -161,7 +161,7 @@ bool Game::Perform(TurnAction& turnAction)
     }
 }
 
-bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard)
+bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget)
 {
     if (!sourcePlayer.CanPlay(sourceCard))
     {
@@ -169,7 +169,13 @@ bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard)
     }
 
     // Exert cards in inkwell equal to card cost.
-    int numExerted = 0;
+    uint8_t numExerted = 0;
+    uint8_t cardCost = sourceCard.cost;
+    if (shiftTarget)
+    {
+        cardCost = sourceCard.shiftValue;
+    }
+
     for (auto& inkedCard : sourcePlayer.inkwell)
     {
         if (!inkedCard.isReady)
@@ -179,14 +185,11 @@ bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard)
         
         inkedCard.isReady = false;
         numExerted += 1;
-        if (numExerted >= sourceCard.cost)
+        if (numExerted >= cardCost)
         {
             break;
         }
     }
-
-    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
-                           { return &card == &sourceCard; });
 
     if (sourceCard.cardType == CardType::Action)
     {
@@ -202,7 +205,12 @@ bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard)
     // There likely needs to be a step that says 'if there's only one Ability in the bag, perform it without waiting'
     // Probably need Ability (type=Triggered, sourcePlayer, bool Perform())
 
+
+    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
+                           { return &card == &sourceCard; });
     sourcePlayer.hand.erase(it);
+
+    // TODO: shift targets somehow need to be kept track of
 
     return true;
 }
@@ -220,45 +228,14 @@ bool Game::UseAbility(Card& sourceCard, const std::string& abilityName, TurnActi
 
 bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard)
 {
-    // Characters can't challenge friendly characters.
-    if (&sourcePlayer == &targetPlayer)
-    {
-        return false;
-    }
-
-    // Only characters can challenge.
-    if (sourceCard.cardType != CardType::Character)
-    {
-        return false;
-    }
-
-    // Only characters and locations can be challenged.
-    if (targetCard.cardType != CardType::Character && targetCard.cardType != CardType::Location)
-    {
-        return false;
-    }
-
-    // If the target is Evasive, this card must also have Evasive to challenge it.    
-    if (targetCard.hasEvasive && !sourceCard.hasEvasive)
-    {
-        return false;
-    }
-
-    // Characters can't attack unless they're Ready.
-    if (!sourceCard.isReady)
-    {
-        return false;
-    }
-
-    // Characters can't attack unless they're Dry or have Rush.
-    if (!sourceCard.isDry && !sourceCard.hasRush)
+    if (!CanChallengeTarget(sourcePlayer, sourceCard, targetPlayer, targetCard))
     {
         return false;
     }
 
     sourceCard.isReady = false;
-    sourceCard.damageCounters += targetCard.strength;
-    targetCard.damageCounters += sourceCard.strength;
+    sourceCard.ApplyDamage(targetCard.strength);
+    targetCard.ApplyDamage(sourceCard.strength);
 
     if (sourceCard.damageCounters >= sourceCard.willpower)
     {
@@ -283,12 +260,7 @@ bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetP
 
 bool Game::InkCard(Player& sourcePlayer, Card& sourceCard)
 {
-    if (sourcePlayer.inkedThisTurn)
-    {
-        return false;
-    }
-
-    if (!sourceCard.inkable)
+    if (!sourcePlayer.CanInk(sourceCard))
     {
         return false;
     }
@@ -331,6 +303,84 @@ bool Game::PassTurn(Player& sourcePlayer)
     currentPhase = Phase::Main;
 
     std::cout << "Current player: " << currentPlayer->name << std::endl;
+
+    return true;
+}
+
+bool Game::CanChallenge(Player& sourcePlayer, Card& sourceCard)
+{
+    // Characters can't attack unless they're Ready.
+    if (!sourceCard.isReady)
+    {
+        return false;
+    }
+
+    // Characters can't attack unless they're Dry or have Rush.
+    if (!sourceCard.isDry && !sourceCard.hasRush)
+    {
+        return false;
+    }
+
+    // Only characters can challenge.
+    if (sourceCard.cardType != CardType::Character)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Game::CanChallengeTarget(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard)
+{
+
+    if (!CanChallenge(sourcePlayer, sourceCard))
+    {
+        return false;
+    }
+
+    // Characters can't challenge friendly characters.
+    if (&sourcePlayer == &targetPlayer)
+    {
+        return false;
+    }
+
+    // Only characters and locations can be challenged.
+    if (targetCard.cardType != CardType::Character && targetCard.cardType != CardType::Location)
+    {
+        return false;
+    }
+
+    // If the targetPlayer has one or more challenge-able bodyGuards, they must be challenged first.
+    const auto& bodyGuards = filterBy(targetPlayer.field, &Card::hasBodyguard, true);
+
+    // TODO: untested
+    if (!bodyGuards.empty() && !containsInstance(bodyGuards, targetCard))
+    {
+        return false;
+    }
+
+    // If the target is Evasive, this card must also have Evasive to challenge it.    
+    if (targetCard.hasEvasive && !sourceCard.hasEvasive)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Game::CanChoose(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard)
+{
+    // Currently a player can always target their own cards.
+    if (&sourcePlayer == &targetPlayer)
+    {
+        return true;
+    }
+
+    // Cards with Ward can't be chosen.
+    if (targetCard.hasWard)
+    {
+        return false;
+    }
 
     return true;
 }

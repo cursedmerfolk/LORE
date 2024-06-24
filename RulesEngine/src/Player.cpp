@@ -38,9 +38,38 @@ bool Player::DoTurnStart(bool doDraw)
 
 bool Player::CanPlay(const Card& card)
 {
-    auto readyInk = filterBy(inkwell, &Card::isReady, true);
+    auto const& readyInk = filterBy(inkwell, &Card::isReady, true);
+
+    // If the card has shift and there is available ink, check for a shift target.
+    // TODO: not tested.
+    if (card.hasShift && card.shiftValue <= readyInk.size())
+    {
+        // Find cards on the field with the same base name as this card.
+        const auto& shiftTargets = filterBy(field, &Card::baseName, card.baseName);
+
+        // If there is at least one shift target, the card can be played.
+        if (!shiftTargets.empty())
+        {
+            return true;
+        }
+    }
 
     if (card.cost > readyInk.size())
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Player::CanInk(const Card& card)
+{
+    if (inkedThisTurn)
+    {
+        return false;
+    }
+
+    if (!card.inkable)
     {
         return false;
     }

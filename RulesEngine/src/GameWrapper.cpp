@@ -174,3 +174,134 @@ bool PassTurn(void* gamePtr, const char* playerName)
 
     return game->Perform(turnAction);
 }
+
+bool CanPlay(void* gamePtr, const char* playerName, int cardIndex)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
+                           { return player.name == playerName; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex >= sourcePlayer.hand.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.hand.at(cardIndex);
+
+    return sourcePlayer.CanPlay(sourceCard);
+}
+
+bool CanInk(void* gamePtr, const char* playerName, int cardIndex)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
+                           { return player.name == playerName; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex >= sourcePlayer.hand.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.hand.at(cardIndex);
+
+    return sourcePlayer.CanInk(sourceCard);
+}
+
+bool CanChallenge(void* gamePtr, const char* playerName, int cardIndex)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
+                           { return player.name == playerName; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.field.at(cardIndex);
+
+    return game->CanChallenge(sourcePlayer, sourceCard);
+}
+
+bool CanChallengeTarget(void* gamePtr, const char* playerName1, int cardIndex1, const char* playerName2, int cardIndex2)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName1](const Player& player)
+                           { return player.name == playerName1; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex1 >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.field.at(cardIndex1);
+
+    it = std::find_if(game->players.begin(), game->players.end(), [&playerName2](const Player& player)
+                      { return player.name == playerName2; });
+    playerIndex = std::distance(game->players.begin(), it);
+
+    Player& targetPlayer = game->players.at(playerIndex);
+
+    if (cardIndex2 >= targetPlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& targetCard = targetPlayer.field.at(cardIndex2);
+
+    return game->CanChallengeTarget(sourcePlayer, sourceCard, targetPlayer, targetCard);
+}
+
+bool CanChoose(void* gamePtr, const char* playerName1, int cardIndex1, const char* playerName2, int cardIndex2)
+{
+    Game* game = (Game*)gamePtr;
+
+    // Find player by name.
+    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName1](const Player& player)
+                           { return player.name == playerName1; });
+    int playerIndex = std::distance(game->players.begin(), it);
+
+    Player& sourcePlayer = game->players.at(playerIndex);
+
+    if (cardIndex1 >= sourcePlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& sourceCard = sourcePlayer.field.at(cardIndex1);
+
+    it = std::find_if(game->players.begin(), game->players.end(), [&playerName2](const Player& player)
+                      { return player.name == playerName2; });
+    playerIndex = std::distance(game->players.begin(), it);
+
+    Player& targetPlayer = game->players.at(playerIndex);
+
+    if (cardIndex2 >= targetPlayer.field.size())
+    {
+        return false;
+    }
+
+    Card& targetCard = targetPlayer.field.at(cardIndex2);
+
+    return game->CanChoose(sourcePlayer, sourceCard, targetPlayer, targetCard);
+}

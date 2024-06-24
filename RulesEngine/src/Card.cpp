@@ -50,6 +50,9 @@ Card::Card(const Json::Value& jsonValue)
 // TODO: move this to a script that will create some sort of config that's loaded, so that it's faster.
 bool Card::parseCardText()
 {
+    // singerValue defaults to card cost.
+    singerValue = cost;
+
     std::smatch match;
 
     for (std::string& abilityText : abilitiesText)
@@ -72,13 +75,57 @@ bool Card::parseCardText()
             hasWard = true;
         }
 
+        re = std::regex("^Support ");
+        if (std::regex_search(abilityText, match, re))
+        {
+            // TODO: not sure how 'whenever character quests' abilities are going to work yet.
+        }
+
+        re = std::regex("^Bodyguard ");
+        if (std::regex_search(abilityText, match, re))
+        {
+            // TODO: may need a 'whenever you play character' ability.
+            hasBodyguard = true;
+        }
+
         // Check for Resist +N
         re = std::regex("^Resist \\+(\\d+)");
         if (std::regex_search(abilityText, match, re))
         {
             resistValue = std::stoi(match[1]);
         }
+
+        // Check for Singer N
+        re = std::regex("^Singer (\\d+) ");
+        if (std::regex_search(abilityText, match, re))
+        {
+            singerValue = std::stoi(match[1]);
+        }
+
+        // Check for Shift N
+        re = std::regex("^Shift (\\d+) ");
+        if (std::regex_search(abilityText, match, re))
+        {
+            hasShift = true;
+            shiftValue = std::stoi(match[1]);
+        }
     }
+
+    return true;
+}
+
+bool Card::ApplyDamage(int8_t damageAmount)
+{
+    // resistValue defaults to 0.
+    damageAmount -= resistValue;
+
+    // Damage can't be negative.
+    if (damageAmount < 0)
+    {
+        damageAmount = 0;
+    }
+
+    damageCounters += damageAmount;
 
     return true;
 }

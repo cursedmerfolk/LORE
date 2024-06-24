@@ -24,3 +24,19 @@ std::vector<CLASS> filterBy(
     }
     return found;
 }
+
+/*
+ * Check if a vector contains an instance, rather than using operator==.
+*/
+template <typename CLASS>
+bool containsInstance(const std::vector<CLASS>& instances, CLASS& instance)
+{
+    // Get a vector of addresses, and check if the address of instance is in that vector.
+    std::vector<const CLASS*> addresses;
+    for (auto const& instance : instances)
+    {
+        addresses.push_back(&instance);
+    }
+
+    return std::find(addresses.begin(), addresses.end(), &instance) != addresses.end();
+}

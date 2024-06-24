@@ -35,6 +35,7 @@ public:
 
     bool DoTurnStart(bool doDraw = true);
     bool CanPlay(const Card& card);
+    bool CanInk(const Card& card);
     bool DoReadyPhase(Card& card);
     bool DoSetPhase(Card& card);
     bool DrawCards(uint8_t numCards);

@@ -99,6 +99,8 @@ public:
 
     Card(const Json::Value& jsonValue);
 
+    bool ApplyDamage(int8_t damageAmount);  // TODO: untested.
+
     /* Initialize values like hasEvasive, hasRush, etc. */
     bool parseCardText();
 
@@ -121,6 +123,8 @@ public:
     // Note - these must be initialized to avoid undefined behavior.
     uint8_t damageCounters{0};
     uint8_t resistValue{0};
+    uint8_t singerValue{0};    // Defaults to card cost.
+    uint8_t shiftValue{0};
     bool isReady{true};
     bool isDry{false};
     bool canReady{true};
@@ -128,6 +132,8 @@ public:
     bool hasRush{false};
     bool hasEvasive{false};
     bool hasWard{false};
+    bool hasBodyguard{false};
+    bool hasShift{false};
 
 };
 
