@@ -5,3 +5,6 @@
 %}
 
 %include "GameWrapper.h"
+
+%include "Card.h"
+%include "Player.h"

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Card.h"
+#include "Player.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -25,7 +28,7 @@ extern "C"
     bool PassTurn(void* gamePtr, const char* playerName);
     bool MoveToLocation(void* gamePtr, const char* playerName, int cardIndex, int locationIndex);
 
-    // Used by UI's to signify actions that are / aren't allowed.
+    // Used by UIs to signify actions that are / aren't allowed.
     bool CanPlay(void* gamePtr, const char* playerName, int cardIndex);  // TODO: untested
     bool CanInk(void* gamePtr, const char* playerName, int cardIndex);  // TODO: untested
     bool CanChallenge(void* gamePtr, const char* playerName, int cardIndex);  // TODO: untested
