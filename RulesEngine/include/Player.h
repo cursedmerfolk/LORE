@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "TurnAction.h"
 #include "Card.h"
 #include "Util.h"
 
@@ -41,6 +42,31 @@ public:
     bool DoReadyPhase(Card& card);
     bool DoSetPhase(Card& card);
     bool DrawCards(uint8_t numCards);
+
+    // Gets the zone of the card where an action is being performed based on turnAction.type.
+    std::vector<Card> getCardZone(const TurnAction& turnAction)
+    {
+        switch (turnAction.type)
+        {
+            case TurnAction::Type::ChallengeCard:
+                return field;
+            case TurnAction::Type::InkCard:
+                return hand;
+            case TurnAction::Type::MoveToLocation:
+                return field;
+            case TurnAction::Type::Mulligan:
+                return hand;
+            case TurnAction::Type::PlayCard:
+                return hand;
+            case TurnAction::Type::QuestCard:
+                return field;
+            case TurnAction::Type::UseAbility:
+                return field;
+            default:
+                break;
+        }
+        return std::vector<Card>();
+    }
 };
 
 }  // namespace Lorcana

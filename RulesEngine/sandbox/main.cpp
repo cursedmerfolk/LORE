@@ -55,7 +55,7 @@ int main() {
         assert(expected[i] == player1.hand[i].fullName);
     }
 
-    assert(game->currentPhase == Lorcana::Phase::Main);
+    assert(game->currentPhase == Lorcana::Game::Phase::Main);
     assert(game->currentPlayer == &player1);
 
     assert(!Mulligan(game, "playerName1", player1Mull, sizeof(player1Mull) / sizeof(int)));

@@ -94,16 +94,16 @@ bool Game::loadCardJson(const std::string& fileName)
 
 bool Game::Perform(TurnAction& turnAction)
 {
-    Player& sourcePlayer = *turnAction.sourcePlayer;
+    Player sourcePlayer = getSourcePlayer(turnAction);
 
-    if (currentPhase == Phase::Mulligan)
+    if (currentPhase == Game::Phase::Mulligan)
     {
         if (turnAction.type != TurnAction::Type::Mulligan)
         {
             return false;
         }
 
-        std::vector<uint8_t> mulligans = *turnAction.mulligans;
+        std::vector<uint8_t> mulligans = getMulligans(turnAction);
         std::sort(mulligans.rbegin(), mulligans.rend());  // Descending order. TODO: verify this.
 
         for (const uint8_t& cardIndex : mulligans)
@@ -124,7 +124,7 @@ bool Game::Perform(TurnAction& turnAction)
         if (notDone.empty())
         {
             currentPlayer->DoTurnStart(false);
-            currentPhase = Phase::Main;
+            currentPhase = Game::Phase::Main;
         }
 
         return true;
@@ -135,7 +135,7 @@ bool Game::Perform(TurnAction& turnAction)
         return false;
     }
 
-    if (currentPhase != Phase::Main)
+    if (currentPhase != Game::Phase::Main)
     {
         return false;
     }
@@ -145,25 +145,29 @@ bool Game::Perform(TurnAction& turnAction)
     switch (turnAction.type)
     {
         case TurnAction::Type::PlayCard:
-            return PlayCard(sourcePlayer, *turnAction.sourceCard, turnAction.shiftTarget);
-        case TurnAction::Type::UseAbility:
-            return UseAbility(*turnAction.sourceCard, *turnAction.abilityName, turnAction);
-        case TurnAction::Type::ChallengeCard:
-            return ChallengeCard(sourcePlayer, *turnAction.sourceCard, *turnAction.targetPlayer, *turnAction.targetCard);
-        case TurnAction::Type::InkCard:
-            return InkCard(sourcePlayer, *turnAction.sourceCard);
-        case TurnAction::Type::QuestCard:
-            return QuestCard(sourcePlayer, *turnAction.sourceCard);
-        case TurnAction::Type::PassTurn:
-            return PassTurn(sourcePlayer);
-        case TurnAction::Type::MoveToLocation:
-            return MoveToLocation(sourcePlayer, *turnAction.sourceCard, *turnAction.targetCard);
-        default:
-            return false;
+        {
+            Card sourceCard = getSourceCard(turnAction);
+            std::optional<Card> shiftTarget = getShiftTarget(turnAction);
+            return PlayCard(sourcePlayer, sourceCard, shiftTarget);
+        }
+        // case TurnAction::Type::UseAbility:
+        //     return UseAbility(getSourceCard(turnAction), getAbilityName(turnAction), turnAction);
+        // case TurnAction::Type::ChallengeCard:
+        //     return ChallengeCard(sourcePlayer, getSourceCard(turnAction), getTargetPlayer(turnAction), getTargetCard(turnAction));
+        // case TurnAction::Type::InkCard:
+        //     return InkCard(sourcePlayer, getSourceCard(turnAction));
+        // case TurnAction::Type::QuestCard:
+        //     return QuestCard(sourcePlayer, getSourceCard(turnAction));
+        // case TurnAction::Type::PassTurn:
+        //     return PassTurn(sourcePlayer);
+        // case TurnAction::Type::MoveToLocation:
+        //     return MoveToLocation(sourcePlayer, getSourceCard(turnAction), getTargetCard(turnAction));
+        // default:
+        //     return false;
     }
 }
 
-bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget)
+bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, std::optional<Card>& shiftTarget)
 {
     if (!sourcePlayer.CanPlay(sourceCard))
     {
@@ -304,7 +308,7 @@ bool Game::PassTurn(Player& sourcePlayer)
     currentPlayer = &players.at(nextIndex);
 
     currentPlayer->DoTurnStart();
-    currentPhase = Phase::Main;
+    currentPhase = Game::Phase::Main;
 
     std::cout << "Current player: " << currentPlayer->name << std::endl;
 
@@ -436,23 +440,23 @@ bool Game::CanQuest(Player& sourcePlayer, Card& sourceCard)
     return true;
 }
 
-bool Game::Elsa_SnowQueen_Freeze(TurnAction& turnAction)
-{
-    Card& sourceCard = *turnAction.sourceCard;
-    Card& targetCard = *turnAction.targetCard;
+// bool Game::Elsa_SnowQueen_Freeze(TurnAction& turnAction)
+// {
+//     Card sourceCard = getSourceCard(turnAction);
+//     Card targetCard = getTargetCard(turnAction);
 
-    if (!sourceCard.isReady)
-    {
-        return false;
-    }
+//     if (!sourceCard.isReady)
+//     {
+//         return false;
+//     }
 
-    // Exert this card.
-    sourceCard.isReady = false;
+//     // Exert this card.
+//     sourceCard.isReady = false;
 
-    // Exert the chosen card.
-    targetCard.isReady = false;
+//     // Exert the chosen card.
+//     targetCard.isReady = false;
 
-    return true;
-}
+//     return true;
+// }
 
 }  // namespace Lorcana

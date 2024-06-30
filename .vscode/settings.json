@@ -76,6 +76,9 @@
         "typeinfo": "cpp",
         "any": "cpp",
         "variant": "cpp",
-        "gamewrapper.h": "c"
+        "gamewrapper.h": "c",
+        "forward_list": "cpp",
+        "ranges": "cpp",
+        "valarray": "cpp"
     }
 }
