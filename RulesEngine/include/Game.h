@@ -25,6 +25,7 @@ public:
 
     enum Phase
     {
+        Unstarted,
         Mulligan,
         Ready,
         Set,
@@ -40,6 +41,9 @@ public:
 
     Game(const std::vector<std::string>& playerNames, unsigned int seed = unsigned(std::time(0)));
 
+    bool AddPlayer(std::string playerName);
+    bool StartGame();
+
     bool Perform(TurnAction& turnAction);
 
     // Used by the wrapper to signify to the UI about actions that are / aren't allowed.
@@ -52,7 +56,7 @@ public:
     static bool Elsa_SnowQueen_Freeze(TurnAction& turnAction);
 
     Player* currentPlayer;
-    Phase currentPhase = Game::Phase::Mulligan;
+    Phase currentPhase = Game::Phase::Unstarted;
     std::vector<Card> cards;
     // std::vector<std::function<void>> bag;
     std::vector<Player> players;
@@ -70,6 +74,9 @@ private:
     bool MoveToLocation(Player& sourcePlayer, Card& sourceCard, Card& targetCard);  // TODO: not tested
 
     bool loadCardJson(const std::string& fileName);
+
+    // Mersenne Twister random number generator.
+    std::mt19937 generator;
 
     // Player getSourcePlayer(const TurnAction& turnAction)
     // {

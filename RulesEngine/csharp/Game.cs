@@ -25,14 +25,33 @@ public class Game {
 
     public static (LORE_Player, LORE_Player) Start(string playerName1, string playerName2)
     {
-        ThisGame.lore_game = game.Game_Create("test1", "test2");
+        ThisGame.lore_game = game.Game_Create();
         return true;
     }
 
-    public static bool Start(object Player, string playerName2)
+    public static bool AddPlayer(object player, string playerName)
     {
-        game.Mulligan(ThisGame.lore_game, );
+        LORE_Player lore_player = game.AddPlayer(ThisGame.lore_game, playerName);
+        ThisGame.players[player] = lore_player;
         return true;
+    }
+
+    public static bool Start()
+    {
+        return game.Start(ThisGame.lore_game);
+    }
+
+    public static bool Mulligan(object player, List<object> cards)
+    {
+        // Find the player instance.
+        LORE_Player lore_player = ThisGame.players[player];
+        List<LORE_Card> lore_cards = new List<LORE_Card>();
+        foreach (object card in cards)
+        {
+            lore_cards.Add(ThisGame.cards[card]);
+        }
+
+        game.Mulligan(lore_player, lore_cards);
     }
 
     public static LORE_Card Card(object csharpObject)

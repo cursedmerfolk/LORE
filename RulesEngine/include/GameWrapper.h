@@ -17,6 +17,9 @@ extern "C"
     void* Game_Create();
     void* Game_Create_Seeded(unsigned int seed);
     void Game_Destroy(void* gamePtr);
+    
+    bool AddPlayer(void* gamePtr, const char* playerName);
+    bool StartGame(void* gamePtr);
 
     bool PlayCard(void* gamePtr, Redacted::Player& sourcePlayer, Redacted::Card& sourceCard);
     bool ChallengeCard(void* gamePtr, const char* playerName1, int cardIndex1, const char* playerName2, int cardIndex2);

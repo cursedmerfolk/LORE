@@ -6,21 +6,32 @@
 using namespace Redacted;
 
 
-void* Game_Create(const char* player1, const char* player2)
+void* Game_Create()
 {
     std::random_device rd;
-    return Game_Create_Seeded(player1, player2, rd());
+    return Game_Create_Seeded(rd());
 }
 
-void* Game_Create_Seeded(const char* player1, const char* player2, unsigned int seed)
+void* Game_Create_Seeded(unsigned int seed)
 {
-    std::vector<std::string> players{player1, player2};
     return new Game(players, seed);
 }
 
 void Game_Destroy(void* gamePtr)
 {
     delete (Game*)gamePtr;
+}
+
+bool AddPlayer(void* gamePtr, const char* playerName)
+{
+    Game* game = (Game*)gamePtr;
+    return game.AddPlayer(playerName);
+}
+
+bool StartGame(void* gamePtr)
+{
+    Game* game = (Game*)gamePtr;
+    return game.StartGame();
 }
 
 bool PlayCard(void* gamePtr, Player& sourcePlayer, Card& sourceCard)

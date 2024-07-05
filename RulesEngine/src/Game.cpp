@@ -3,19 +3,8 @@
 namespace Redacted
 {
 
-Game::Game(const std::vector<std::string>& playerNames, unsigned int seed)
+Game::Game(unsigned int seed) : generator(seed)
 {
-    std::mt19937 generator(seed); // Mersenne Twister random number generator
-
-    for (const auto& name : playerNames)
-    {
-        players.emplace_back(name);
-    }
-
-    std::uniform_int_distribution<> distr(0, players.size() - 1);
-    int random_number = distr(generator);
-    currentPlayer = &players.at(random_number);
-
     if (!loadCardJson("../../allCards.json"))
     {
         return;
@@ -23,6 +12,29 @@ Game::Game(const std::vector<std::string>& playerNames, unsigned int seed)
 
     // Register abilities in lookup map.
     abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
+}
+
+bool AddPlayer(std::string playerName)
+{
+    uint8_t count = std::count(players.begin(), players.end(), playerName);
+    if (count > 0)
+    {
+        // TODO: add logging.
+        // log("[Game::AddPlayer] Player name %s already exists.", playerName);
+        return false;
+    }
+
+    players.emplace_back(playerName);
+    return true;
+}
+
+bool StartGame()
+{
+    // Don't start the game if it's already started.
+    if (currentPhase != Game::Phase::Unstarted)
+    {
+        return false;
+    }
 
     // Number from 1 to N cards.
     std::vector<int> indices;
@@ -45,8 +57,15 @@ Game::Game(const std::vector<std::string>& playerNames, unsigned int seed)
         player.DrawCards(7);
     }
 
-}
+    // Randomly select the curent player.
+    std::uniform_int_distribution<> distr(0, players.size() - 1);
+    int random_number = distr(generator);
+    currentPlayer = &players.at(random_number);
 
+    currentPhase = Game::Phase::Mulligan;
+
+    return true;
+}
 
 bool Game::loadCardJson(const std::string& fileName)
 {

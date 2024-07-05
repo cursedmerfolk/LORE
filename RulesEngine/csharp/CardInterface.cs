@@ -4,23 +4,22 @@ namespace LORE {
 
 public interface CardInterface {
 
-    public string Owner
-    {
-        get {
-            // TODO
-        }
-        set {
-            // TODO
-        }
-    }
+    // public string Owner
+    // {
+    //     get {
+    //         // return Game.Card(this).Owner;
+    //     }
+    //     set {
+    //         // TODO
+    //     }
+    // }
    
 
     public byte Cost
     {
         get
         {
-            // something like Game.Card(this).Cost
-            // which uses a table, I suppose.
+            return Game.Card(this).cost;
         }
         set
         {
