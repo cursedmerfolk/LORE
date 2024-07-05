@@ -1,6 +1,6 @@
 #include "Player.h"
 
-namespace Lorcana
+namespace Redacted
 {
 
 uint8_t Player::currentId = 0;
@@ -143,4 +143,4 @@ bool Player::DrawCards(uint8_t numCards = 1)
     return true;
 }
 
-}  // namespace Lorcana
+}  // namespace Redacted

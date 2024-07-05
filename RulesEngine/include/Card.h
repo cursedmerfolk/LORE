@@ -8,7 +8,7 @@
 #include <vector>
 
 
-namespace Lorcana
+namespace Redacted
 {
 
 enum class CardColor
@@ -143,4 +143,4 @@ public:
 
 };
 
-}  // namespace Lorcana
+}  // namespace Redacted

@@ -1,8 +1,9 @@
 #include "GameWrapper.h"
 
+#include "TurnAction.h"
 #include "Game.h"
 
-using namespace Lorcana;
+using namespace Redacted;
 
 
 void* Game_Create(const char* player1, const char* player2)
@@ -22,28 +23,47 @@ void Game_Destroy(void* gamePtr)
     delete (Game*)gamePtr;
 }
 
-bool PlayCard(void* gamePtr, const char* playerName, int cardIndex)
+bool PlayCard(void* gamePtr, Player& sourcePlayer, Card& sourceCard)
 {
     Game* game = (Game*)gamePtr;
 
-    // Find player by name.
-    auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
-                           { return player.name == playerName; });
-    int playerIndex = std::distance(game->players.begin(), it);
+    // Perform the Action.
+    return game->PlayCard(sourcePlayer, sourceCard);
 
-    Player& sourcePlayer = game->players.at(playerIndex);
+    // // Return a TurnAction that represents what happened.
+    // // It's also sent over the network when needed.
+    // TurnAction turnAction;
 
-    if (cardIndex >= sourcePlayer.hand.size())
-    {
-        return false;
-    }
+    // // Just have that thing contain pointers.
+    // // toBytes can convert from pointers to etc.
+    
+    // // Get player index.
+    // auto it = std::find_if(game->players.begin(), game->players.end(), [&sourcePlayer](const Player& player)
+    //                        { return &sourcePlayer == &player; });
+    // int playerIndex = std::distance(game->players.begin(), it);
+    // turnAction.sourcePlayerIndex = playerIndex;
 
-    Card& sourceCard = sourcePlayer.hand.at(cardIndex);
-    TurnAction turnAction;
-    turnAction.type = TurnAction::Type::PlayCard;
-    turnAction.sourcePlayer = &sourcePlayer;
-    turnAction.sourceCard = &sourceCard;
-    return game->Perform(turnAction);
+
+
+
+    // // Find player by name.
+    // auto it = std::find_if(game->players.begin(), game->players.end(), [&playerName](const Player& player)
+    //                        { return player.name == playerName; });
+    // int playerIndex = std::distance(game->players.begin(), it);
+
+    // Player& sourcePlayer = game->players.at(playerIndex);
+
+    // if (cardIndex >= sourcePlayer.hand.size())
+    // {
+    //     return false;
+    // }
+
+    // Card& sourceCard = sourcePlayer.hand.at(cardIndex);
+    // TurnAction turnAction;
+    // turnAction.type = TurnAction::Type::PlayCard;
+    // turnAction.sourcePlayer = &sourcePlayer;
+    // turnAction.sourceCard = &sourceCard;
+    // return game->Perform(turnAction);
 }
 
 bool ChallengeCard(void* gamePtr, const char* playerName1, int cardIndex1, const char* playerName2, int cardIndex2)

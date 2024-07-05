@@ -1,6 +1,6 @@
 #include "Game.h"
 
-namespace Lorcana
+namespace Redacted
 {
 
 Game::Game(const std::vector<std::string>& playerNames, unsigned int seed)
@@ -94,7 +94,7 @@ bool Game::loadCardJson(const std::string& fileName)
 
 bool Game::Perform(TurnAction& turnAction)
 {
-    Player sourcePlayer = getSourcePlayer(turnAction);
+    Player sourcePlayer = *turnAction.sourcePlayer;
 
     if (currentPhase == Game::Phase::Mulligan)
     {
@@ -103,7 +103,7 @@ bool Game::Perform(TurnAction& turnAction)
             return false;
         }
 
-        std::vector<uint8_t> mulligans = getMulligans(turnAction);
+        std::vector<uint8_t> mulligans = *turnAction.mulligans;
         std::sort(mulligans.rbegin(), mulligans.rend());  // Descending order. TODO: verify this.
 
         for (const uint8_t& cardIndex : mulligans)
@@ -146,28 +146,28 @@ bool Game::Perform(TurnAction& turnAction)
     {
         case TurnAction::Type::PlayCard:
         {
-            Card sourceCard = getSourceCard(turnAction);
-            std::optional<Card> shiftTarget = getShiftTarget(turnAction);
-            return PlayCard(sourcePlayer, sourceCard, shiftTarget);
+            // Card sourceCard = *turnAction.sourceCard;
+            // std::optional<Card> shiftTarget = getShiftTarget(turnAction);
+            return PlayCard(sourcePlayer, *turnAction.sourceCard, turnAction.shiftTarget);
         }
-        // case TurnAction::Type::UseAbility:
-        //     return UseAbility(getSourceCard(turnAction), getAbilityName(turnAction), turnAction);
-        // case TurnAction::Type::ChallengeCard:
-        //     return ChallengeCard(sourcePlayer, getSourceCard(turnAction), getTargetPlayer(turnAction), getTargetCard(turnAction));
-        // case TurnAction::Type::InkCard:
-        //     return InkCard(sourcePlayer, getSourceCard(turnAction));
-        // case TurnAction::Type::QuestCard:
-        //     return QuestCard(sourcePlayer, getSourceCard(turnAction));
-        // case TurnAction::Type::PassTurn:
-        //     return PassTurn(sourcePlayer);
-        // case TurnAction::Type::MoveToLocation:
-        //     return MoveToLocation(sourcePlayer, getSourceCard(turnAction), getTargetCard(turnAction));
-        // default:
-        //     return false;
+        case TurnAction::Type::UseAbility:
+            return UseAbility(*turnAction.sourceCard, *turnAction.abilityName, turnAction);
+        case TurnAction::Type::ChallengeCard:
+            return ChallengeCard(sourcePlayer, *turnAction.sourceCard, *turnAction.targetPlayer, *turnAction.targetCard);
+        case TurnAction::Type::InkCard:
+            return InkCard(sourcePlayer, *turnAction.sourceCard);
+        case TurnAction::Type::QuestCard:
+            return QuestCard(sourcePlayer, *turnAction.sourceCard);
+        case TurnAction::Type::PassTurn:
+            return PassTurn(sourcePlayer);
+        case TurnAction::Type::MoveToLocation:
+            return MoveToLocation(sourcePlayer, *turnAction.sourceCard, *turnAction.targetCard);
+        default:
+            return false;
     }
 }
 
-bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, std::optional<Card>& shiftTarget)
+bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget)
 {
     if (!sourcePlayer.CanPlay(sourceCard))
     {
@@ -442,8 +442,8 @@ bool Game::CanQuest(Player& sourcePlayer, Card& sourceCard)
 
 // bool Game::Elsa_SnowQueen_Freeze(TurnAction& turnAction)
 // {
-//     Card sourceCard = getSourceCard(turnAction);
-//     Card targetCard = getTargetCard(turnAction);
+//     Card sourceCard = *turnAction.sourceCard;
+//     Card targetCard = *turnAction.targetCard;
 
 //     if (!sourceCard.isReady)
 //     {
@@ -459,4 +459,4 @@ bool Game::CanQuest(Player& sourcePlayer, Card& sourceCard)
 //     return true;
 // }
 
-}  // namespace Lorcana
+}  // namespace Redacted

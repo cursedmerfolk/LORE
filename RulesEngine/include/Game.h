@@ -16,7 +16,7 @@
 #include "Util.h"
 
 
-namespace Lorcana
+namespace Redacted
 {
 
 class Game
@@ -58,8 +58,10 @@ public:
     std::vector<Player> players;
     std::unordered_map<std::string, std::function<bool(TurnAction&)>> abilities;
 
+    
+    bool PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget = nullptr);
+
 private:
-    bool PlayCard(Player& sourcePlayer, Card& sourceCard, std::optional<Card>& shiftTarget);
     bool UseAbility(Card& sourceCard, const std::string& abilityName, TurnAction& turnAction);
     bool ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetPlayer, Card& targetCard);
     bool InkCard(Player& sourcePlayer, Card& sourceCard);
@@ -69,52 +71,52 @@ private:
 
     bool loadCardJson(const std::string& fileName);
 
-    Player getSourcePlayer(const TurnAction& turnAction)
-    {
-        return players.at(turnAction.sourcePlayerIndex);
-    }
-    Card getSourceCard(const TurnAction& turnAction)
-    {
-        Player sourcePlayer = getSourcePlayer(turnAction);
-        std::vector<Card> sourceZone = sourcePlayer.getCardZone(turnAction);
-        return sourceZone.at(turnAction.sourceCardIndex);
-    }
-    Player getTargetPlayer(const TurnAction& turnAction)
-    {
-        return players.at(turnAction.targetPlayerIndex);
-    }
-    Card getTargetCard(const TurnAction& turnAction)
-    {
-        Player targetPlayer = getSourcePlayer(turnAction);
-        std::vector<Card> targetZone = targetPlayer.getCardZone(turnAction);
-        return targetZone.at(turnAction.sourceCardIndex);
-    }
+    // Player getSourcePlayer(const TurnAction& turnAction)
+    // {
+    //     return players.at(turnAction.sourcePlayerIndex);
+    // }
+    // Card getSourceCard(const TurnAction& turnAction)
+    // {
+    //     Player sourcePlayer = *turnAction.sourcePlayer;
+    //     std::vector<Card> sourceZone = sourcePlayer.getCardZone(turnAction);
+    //     return sourceZone.at(turnAction.sourceCardIndex);
+    // }
+    // Player getTargetPlayer(const TurnAction& turnAction)
+    // {
+    //     return players.at(turnAction.targetPlayerIndex);
+    // }
+    // Card getTargetCard(const TurnAction& turnAction)
+    // {
+    //     Player targetPlayer = *turnAction.sourcePlayer;
+    //     std::vector<Card> targetZone = targetPlayer.getCardZone(turnAction);
+    //     return targetZone.at(turnAction.sourceCardIndex);
+    // }
 
-    std::optional<Card> getShiftTarget(const TurnAction& turnAction)
-    {
-        if (turnAction.shiftTargetIndex > 0)
-        {
-            Player sourcePlayer = getSourcePlayer(turnAction);
-            return sourcePlayer.field.at(turnAction.shiftTargetIndex);
-        }
-        return std::nullopt;
-    }
+    // std::optional<Card> getShiftTarget(const TurnAction& turnAction)
+    // {
+    //     if (turnAction.shiftTargetIndex > 0)
+    //     {
+    //         Player sourcePlayer = *turnAction.sourcePlayer;
+    //         return sourcePlayer.field.at(turnAction.shiftTargetIndex);
+    //     }
+    //     return std::nullopt;
+    // }
 
-    std::vector<uint8_t> getMulligans(const TurnAction& turnAction)
-    {
-        Player sourcePlayer = getSourcePlayer(turnAction);
-        std::vector<uint8_t> mulligans;
-        for (auto& cardIndex : turnAction.mulligans)
-        {
-            if (cardIndex == -1)
-            {
-                continue;
-            }
-            mulligans.push_back((uint8_t)cardIndex);
-        }
-        return mulligans;
-    }
+    // std::vector<uint8_t> getMulligans(const TurnAction& turnAction)
+    // {
+    //     Player sourcePlayer = *turnAction.sourcePlayer;
+    //     std::vector<uint8_t> mulligans;
+    //     for (auto& cardIndex : turnAction.mulligans)
+    //     {
+    //         if (cardIndex == -1)
+    //         {
+    //             continue;
+    //         }
+    //         mulligans.push_back((uint8_t)cardIndex);
+    //     }
+    //     return mulligans;
+    // }
 
     // bool ResolveAbility(std::function<void>); // Resolve an ability in the bag.
 };
-}  // namespace Lorcana
+}  // namespace Redacted

@@ -1,6 +1,6 @@
 #include "Card.h"
 
-namespace Lorcana
+namespace Redacted
 {
 
 Card::Card(const Card& other) : cost(other.cost),
@@ -208,4 +208,4 @@ CardColor getColor(const std::string& colorStr)
     throw std::invalid_argument("Invalid color: " + colorStr);
 }
 
-}  // namespace Lorcana
+}  // namespace Redacted

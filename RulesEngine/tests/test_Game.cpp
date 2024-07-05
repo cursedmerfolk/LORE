@@ -10,7 +10,7 @@
 TEST(Test_GameWrapper, Basic)
 {
 
-    Lorcana::Game* game = (Lorcana::Game*)Game_Create("playerName1", "playerName2");
+    Redacted::Game* game = (Redacted::Game*)Game_Create("playerName1", "playerName2");
 
     EXPECT_FALSE(PlayCard(game, "playerName1", 0));
     EXPECT_FALSE(PlayCard(game, "playerName2", 0));

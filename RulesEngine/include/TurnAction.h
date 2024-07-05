@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Player.h"
 
-namespace Lorcana
+
+namespace Redacted
 {
 
-#pragma pack(push, 1)
+// #pragma pack(push, 1)
 struct TurnAction
 {
 public:
@@ -20,37 +22,38 @@ public:
         UseAbility,
     };
 
-    char abilityName[32];
-    int8_t singers[16];
-    int8_t mulligans[8];
-    uint8_t sourcePlayerIndex;
-    uint8_t sourceCardIndex;
-    uint8_t targetPlayerIndex;
-    uint8_t targetCardIndex;
-    uint8_t shiftTargetIndex;
+    // char abilityName[32];
+    // int8_t singers[16];
+    // int8_t mulligans[8];
+    // uint8_t sourcePlayerIndex;
+    // uint8_t sourceCardIndex;
+    // uint8_t targetPlayerIndex;
+    // uint8_t targetCardIndex;
+    // uint8_t shiftTargetIndex;
+    // Type type;
+    // bool succeeded{true};
+
+    // uint8_t* toBytes()
+    // {
+    //     return reinterpret_cast<uint8_t*>(this);
+    // }
+
+    // static TurnAction* fromBytes(uint8_t* bytes)
+    // {
+    //     return reinterpret_cast<TurnAction*>(bytes);
+    // }
+
+
+    // Pointers feel wrong, not sure how to fix.
     Type type;
-    bool succeeded{true};
-
-    uint8_t* toBytes()
-    {
-        return reinterpret_cast<uint8_t*>(this);
-    }
-
-    static TurnAction* fromBytes(uint8_t* bytes)
-    {
-        return reinterpret_cast<TurnAction*>(bytes);
-    }
-
-
-    // // Pointers feel wrong, not sure how to fix.
-    // Player* sourcePlayer;
-    // Card* sourceCard;
-    // Player* targetPlayer;
-    // Card* targetCard;
-    // std::vector<Card>* singers;
-    // std::string* abilityName;
-    // std::vector<uint8_t>* mulligans;
-    // Card* shiftTarget;
+    Player* sourcePlayer;
+    Card* sourceCard;
+    Player* targetPlayer;
+    Card* targetCard;
+    std::vector<Card>* singers;
+    std::string* abilityName;
+    std::vector<uint8_t>* mulligans;
+    Card* shiftTarget;
 
     std::string getTypeString()
     {
@@ -64,6 +67,6 @@ public:
         return "Unknown";
     }
 };
-#pragma pack(pop)
+// #pragma pack(pop)
 
-}  // namespace Lorcana
+}  // namespace Redacted

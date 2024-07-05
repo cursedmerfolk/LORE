@@ -6,9 +6,9 @@
 
 int main() {
 
-    Lorcana::Game* game = (Lorcana::Game*)Game_Create_Seeded("playerName1", "playerName2", 1234);
-    Lorcana::Player& player1 = game->players.at(0);
-    Lorcana::Player& player2 = game->players.at(1);
+    Redacted::Game* game = (Redacted::Game*)Game_Create_Seeded("playerName1", "playerName2", 1234);
+    Redacted::Player& player1 = game->players.at(0);
+    Redacted::Player& player2 = game->players.at(1);
 
     assert(player1.hand.size() == 7);
     assert(player2.hand.size() == 7);
@@ -55,7 +55,7 @@ int main() {
         assert(expected[i] == player1.hand[i].fullName);
     }
 
-    assert(game->currentPhase == Lorcana::Game::Phase::Main);
+    assert(game->currentPhase == Redacted::Game::Phase::Main);
     assert(game->currentPlayer == &player1);
 
     assert(!Mulligan(game, "playerName1", player1Mull, sizeof(player1Mull) / sizeof(int)));
@@ -135,7 +135,7 @@ int main() {
     assert(player1.discard.size() == 2);  // Lefou and How Far I'll Go in discard
 
     // Add a location to player1 hand for testing.
-    Lorcana::Card motunui = filterBy(game->cards, &Lorcana::Card::fullName, std::string("Motunui - Island Paradise")).at(0);
+    Redacted::Card motunui = filterBy(game->cards, &Redacted::Card::fullName, std::string("Motunui - Island Paradise")).at(0);
     player1.hand.push_back(motunui);
     assert(PlayCard(game, "playerName1", 4));  // Motunui - Island Paradise
     assert(PassTurn(game, "playerName1"));
