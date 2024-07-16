@@ -132,10 +132,13 @@ bool Player::DoSetPhase(Card& card)
 
 bool Player::DrawCards(uint8_t numCards = 1)
 {
-    // TODO: handle drawing more cards than the deck has.
-
     for (uint8_t i = 0; i < numCards; ++i)
     {
+        if (deck.empty())
+        {
+            return false;
+        }
+
         hand.push_back(deck.back());
         deck.pop_back();
     }

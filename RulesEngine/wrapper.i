@@ -1,4 +1,4 @@
-%module Lore
+%module wrapper
 
 %{
 #include "GameWrapper.h"
@@ -7,10 +7,11 @@
 %include "GameWrapper.h"
 
 
-// Rename the exposed Player and Card classes
-%rename(LORE_Player) Player;
+// TODO: it would be nice for these to be in a namespace instead of having to prepend 'LORE_'
 %rename(LORE_Card) Card;
+%rename(LORE_Player) Player;
+%rename(LORE_TurnAction) TurnAction;
 
-// %include "TurnAction.h"
 %include "Card.h"
 %include "Player.h"
+%include "TurnAction.h"

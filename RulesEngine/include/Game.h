@@ -39,7 +39,7 @@ public:
 
     Game(const Game& other) = default;
 
-    Game(const std::vector<std::string>& playerNames, unsigned int seed = unsigned(std::time(0)));
+    Game(unsigned int seed = unsigned(std::time(0)));
 
     bool AddPlayer(std::string playerName);
     bool StartGame();
@@ -62,8 +62,7 @@ public:
     std::vector<Player> players;
     std::unordered_map<std::string, std::function<bool(TurnAction&)>> abilities;
 
-    
-    bool PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget = nullptr);
+    bool PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget = nullptr, int8_t targetIndex = -1);
 
 private:
     bool UseAbility(Card& sourceCard, const std::string& abilityName, TurnAction& turnAction);
@@ -78,6 +77,7 @@ private:
     // Mersenne Twister random number generator.
     std::mt19937 generator;
 
+    // TODO: delete
     // Player getSourcePlayer(const TurnAction& turnAction)
     // {
     //     return players.at(turnAction.sourcePlayerIndex);

@@ -6,15 +6,17 @@
 
 int main() {
 
-    Redacted::Game* game = (Redacted::Game*)Game_Create_Seeded("playerName1", "playerName2", 1234);
+    Redacted::Game* game = (Redacted::Game*)Game_Create_Seeded(1234);
+    AddPlayer(game, "playerName1");
+    AddPlayer(game, "playerName2");
     Redacted::Player& player1 = game->players.at(0);
     Redacted::Player& player2 = game->players.at(1);
 
     assert(player1.hand.size() == 7);
     assert(player2.hand.size() == 7);
 
-    assert(!PlayCard(game, "playerName1", 0));
-    assert(!PlayCard(game, "playerName2", 0));
+    assert(!PlayCard(game, player1, player1.hand[0]).succeeded);
+    assert(!PlayCard(game, player1, player2.hand[0]).succeeded);
     
     std::vector<std::string> expected = {
         "Stitch - Rock Star",
@@ -34,10 +36,9 @@ int main() {
     int player1Mull[]{0, 1, 2};
     int player2Mull[]{3, 4, 5, 6};
 
-    assert(Mulligan(game, "playerName1", player1Mull, sizeof(player1Mull) / sizeof(int)));
-    assert(Mulligan(game, "playerName2", player2Mull, sizeof(player2Mull) / sizeof(int)));
+    assert(Mulligan(game, "playerName1", player1Mull, sizeof(player1Mull) / sizeof(int)).succeeded);
+    assert(Mulligan(game, "playerName2", player2Mull, sizeof(player2Mull) / sizeof(int)).succeeded);
 
-    // assert(player1.hand.size() == 7);
     assert(player2.hand.size() == 7);
     
     expected = {

@@ -6,22 +6,8 @@
 namespace Redacted
 {
 
-// #pragma pack(push, 1)
-struct TurnAction
-{
-public:
-    enum Type
-    {
-        ChallengeCard,
-        InkCard,
-        MoveToLocation,
-        Mulligan,
-        PassTurn,
-        PlayCard,
-        QuestCard,
-        UseAbility,
-    };
 
+//TODO: delete these
     // char abilityName[32];
     // int8_t singers[16];
     // int8_t mulligans[8];
@@ -44,16 +30,43 @@ public:
     // }
 
 
+struct TurnAction
+{
+public:
+    enum Type
+    {
+        // Before game
+        AddPlayer,
+        StartGame,
+        // During game
+        ChallengeCard,
+        InkCard,
+        MoveToLocation,
+        Mulligan,
+        PassTurn,
+        PlayCard,
+        QuestCard,
+        UseAbility,
+    };
+
+    TurnAction() = default;
+    ~TurnAction() = default;
+    TurnAction(const TurnAction& other) = default;
+
+    TurnAction(Type type_) : type(type_) {};
+
     // Pointers feel wrong, not sure how to fix.
     Type type;
+    bool succeeded;
     Player* sourcePlayer;
     Card* sourceCard;
     Player* targetPlayer;
     Card* targetCard;
     std::vector<Card>* singers;
     std::string* abilityName;
-    std::vector<uint8_t>* mulligans;
+    std::vector<Card>* mulligans;
     Card* shiftTarget;
+    uint8_t targetIndex;           // Index in the target zone being moved to.
 
     std::string getTypeString()
     {
@@ -66,6 +79,7 @@ public:
         if (type == Type::UseAbility) return "UseAbility";
         return "Unknown";
     }
+
 };
 // #pragma pack(pop)
 

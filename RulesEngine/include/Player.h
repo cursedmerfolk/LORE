@@ -24,7 +24,7 @@ public:
     std::vector<Card> hand;
     std::vector<Card> field;
     std::vector<Card> discard;
-    std::vector<Card> deck;
+    std::vector<Card> deck;       // Draw from the back of the deck (pop_back())
     std::vector<Card> inkwell;
 
     // Misc

@@ -3,9 +3,13 @@ using System.Collections.Generic;
 namespace LORE {
 
 /*
+ * This code is complicated and hard to read.
+ *
  * TODO: looking for a simpler way to do this.
  */
 public class Game {
+
+	private SWIGTYPE_p_void lore_game = null;
 
     private static Game thisGame = null;
     static Game ThisGame
@@ -14,34 +18,43 @@ public class Game {
             if (thisGame == null)
             {
                 thisGame = new Game();
+                thisGame.lore_game = wrapper.Game_Create();
             }
             return thisGame;
         }
     }
-	private SWIGTYPE_p_void lore_game;
 
-    private Dictionary<object, LORE_Player> players;
     private Dictionary<object, LORE_Card> cards;
+    private Dictionary<object, LORE_Player> players;
 
-    public static (LORE_Player, LORE_Player) Start(string playerName1, string playerName2)
+    Dictionary<object, LORE_Card> Cards
     {
-        ThisGame.lore_game = game.Game_Create();
-        return true;
+        get {
+            return ThisGame.cards
+        }
     }
 
+    Dictionary<object, LORE_Player> Players
+    {
+        get {
+            return ThisGame.players
+        }
+    }
+
+    // TODO: maybe be able to pass playerInterface here.
     public static bool AddPlayer(object player, string playerName)
     {
-        LORE_Player lore_player = game.AddPlayer(ThisGame.lore_game, playerName);
+        LORE_Player lore_player = wrapper.AddPlayer(ThisGame.lore_game, playerName);
         ThisGame.players[player] = lore_player;
         return true;
     }
 
     public static bool Start()
     {
-        return game.Start(ThisGame.lore_game);
+        return wrapper.StartGame(ThisGame.lore_game);
     }
 
-    public static bool Mulligan(object player, List<object> cards)
+    public static LORE_TurnAction Mulligan(object player, List<object> cards)
     {
         // Find the player instance.
         LORE_Player lore_player = ThisGame.players[player];
@@ -51,12 +64,14 @@ public class Game {
             lore_cards.Add(ThisGame.cards[card]);
         }
 
-        game.Mulligan(lore_player, lore_cards);
+        return wrapper.Mulligan(lore_player, lore_cards);
     }
 
-    public static LORE_Card Card(object csharpObject)
+    public static LORE_TurnAction PlayCard(object player, object card)
     {
-        return ThisGame.cards[csharpObject];
+        LORE_Player lore_player = ThisGame.players[player];
+        LORE_Card lore_card = ThisGame.cards[card];
+        return wrapper.PlayCard(ThisGame.lore_game, lore_player, lore_card);
     }
 
 }

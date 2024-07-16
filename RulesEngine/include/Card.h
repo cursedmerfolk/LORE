@@ -11,6 +11,8 @@
 namespace Redacted
 {
 
+class Player;
+
 enum class CardColor
 {
     Amber,
@@ -84,8 +86,10 @@ CardColor getColor(const std::string& colorStr);
 class Card
 {
 public:
-    Card() = default;
+    Card() = delete;
     ~Card() = default;
+
+    Card(Player* owner_) : owner(owner_) {};
 
     /*
      * This constructor occurs specifically when a Card goes to a new zone.
@@ -99,7 +103,9 @@ public:
 
     Card(const Json::Value& jsonValue);
 
-    bool ApplyDamage(int8_t damageAmount);  // TODO: untested.
+    bool ApplyDamage(int8_t damageAmount);
+
+    bool ChangeZone(std::vector<Card>& from, std::vector<Card>& to, int8_t index = -1);
 
     /* Initialize values like hasEvasive, hasRush, etc. */
     bool parseCardText();
@@ -123,13 +129,15 @@ public:
     Rarity rarity;
     CardColor color;
     Card* atLocation;
+    Player* owner;
 
     // Other attributes.
     // Note - these must be initialized to avoid undefined behavior.
-    uint8_t damageCounters{0};
+    uint8_t damageCounters{0}; 
     uint8_t resistValue{0};
-    uint8_t singerValue{0};    // Defaults to card cost.
+    uint8_t singerValue{0};     // Defaults to card cost.
     uint8_t shiftValue{0};
+    uint8_t index{0};           // index in it's current zone.
     bool isReady{true};
     bool isDry{false};
     bool canReadyThisTurn{true};

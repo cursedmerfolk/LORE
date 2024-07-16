@@ -1,29 +1,30 @@
 
 
+
 namespace LORE {
 
 public interface CardInterface {
 
-    // public string Owner
-    // {
-    //     get {
-    //         // return Game.Card(this).Owner;
-    //     }
-    //     set {
-    //         // TODO
-    //     }
-    // }
+    public string Owner
+    {
+        get {
+            return Game.Cards[this].owner;
+        }
+        set {
+            Game.Cards[this].owner = value;
+        }
+    }
    
 
     public byte Cost
     {
         get
         {
-            return Game.Card(this).cost;
+            return Game.Cards[this].cost;
         }
         set
         {
-            // TODO
+            Game.Cards[this].cost = value;
         }
     }
 
@@ -31,11 +32,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].fullName;
         }
         set
         {
-            // TODO
+            Game.Cards[this].fullName = value;
         }
     }
 
@@ -43,11 +44,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].baseName;
         }
         set
         {
-            // TODO
+            Game.Cards[this].baseName = value;
         }
     }
 
@@ -55,11 +56,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].version;
         }
         set
         {
-            // TODO
+            Game.Cards[this].version = value;
         }
     }
 
@@ -67,11 +68,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].cardType;
         }
         set
         {
-            // TODO
+            Game.Cards[this].cardType = value;
         }
     }
 
@@ -79,11 +80,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].classifications;
         }
         set
         {
-            // TODO
+            Game.Cards[this].classifications = value;
         }
     }
 
@@ -91,11 +92,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].strength;
         }
         set
         {
-            // TODO
+            Game.Cards[this].strength = value;
         }
     }
 
@@ -103,11 +104,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].moveCost;
         }
         set
         {
-            // TODO
+            Game.Cards[this].moveCost = value;
         }
     }
 
@@ -115,11 +116,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].willpower;
         }
         set
         {
-            // TODO
+            Game.Cards[this].willpower = value;
         }
     }
 
@@ -127,11 +128,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].lore;
         }
         set
         {
-            // TODO
+            Game.Cards[this].lore = value;
         }
     }
 
@@ -139,11 +140,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].inkable;
         }
         set
         {
-            // TODO
+            Game.Cards[this].inkable = value;
         }
     }
 
@@ -151,11 +152,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].abilitiesText;
         }
         set
         {
-            // TODO
+            Game.Cards[this].abilitiesText = value;
         }
     }
 
@@ -163,11 +164,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].rarity;
         }
         set
         {
-            // TODO
+            Game.Cards[this].rarity = value;
         }
     }
 
@@ -175,11 +176,11 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].color;
         }
         set
         {
-            // TODO
+            Game.Cards[this].color = value;
         }
     }
 
@@ -187,15 +188,13 @@ public interface CardInterface {
     {
         get
         {
-            // TODO
+            return Game.Cards[this].atLocation;
         }
         set
         {
-            // TODO
+            Game.Cards[this].atLocation = value;
         }
     }
-
-
 
 }
 

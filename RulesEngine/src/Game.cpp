@@ -14,21 +14,23 @@ Game::Game(unsigned int seed) : generator(seed)
     abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
 }
 
-bool AddPlayer(std::string playerName)
+bool Game::AddPlayer(std::string playerName)
 {
-    uint8_t count = std::count(players.begin(), players.end(), playerName);
-    if (count > 0)
+    for (Player& player : players)
     {
-        // TODO: add logging.
-        // log("[Game::AddPlayer] Player name %s already exists.", playerName);
-        return false;
+        if (player.name == playerName)
+        {
+            // TODO: add logging.
+            // log("[Game::AddPlayer] Player name %s already exists.", playerName);
+            return false;
+        }
     }
 
     players.emplace_back(playerName);
     return true;
 }
 
-bool StartGame()
+bool Game::StartGame()
 {
     // Don't start the game if it's already started.
     if (currentPhase != Game::Phase::Unstarted)
@@ -50,14 +52,17 @@ bool StartGame()
         std::shuffle(indices.begin(), indices.end(), generator);
         for (int i = 1; i <= 60; ++i)
         {
-            player.deck.push_back(cards.at(indices.at(i)));
+            // Copy constructor called here.
+            Card card = cards.at(indices.at(i));
+            card.owner = &player;
+            player.deck.push_back(card);
         }
 
         // Draw 7.
         player.DrawCards(7);
     }
 
-    // Randomly select the curent player.
+    // Randomly select the current player.
     std::uniform_int_distribution<> distr(0, players.size() - 1);
     int random_number = distr(generator);
     currentPlayer = &players.at(random_number);
@@ -122,16 +127,11 @@ bool Game::Perform(TurnAction& turnAction)
             return false;
         }
 
-        std::vector<uint8_t> mulligans = *turnAction.mulligans;
-        std::sort(mulligans.rbegin(), mulligans.rend());  // Descending order. TODO: verify this.
+        std::vector<Card> mulligans = *turnAction.mulligans;
 
-        for (const uint8_t& cardIndex : mulligans)
+        for (Card& card : mulligans)
         {
-            if (cardIndex < 0 || cardIndex >= sourcePlayer.hand.size())
-            {
-                return false;
-            }
-            sourcePlayer.hand.erase(sourcePlayer.hand.begin() + cardIndex);
+            card.ChangeZone(sourcePlayer.hand, sourcePlayer.deck, 0);
         }
 
         // Draw that many cards.
@@ -164,11 +164,7 @@ bool Game::Perform(TurnAction& turnAction)
     switch (turnAction.type)
     {
         case TurnAction::Type::PlayCard:
-        {
-            // Card sourceCard = *turnAction.sourceCard;
-            // std::optional<Card> shiftTarget = getShiftTarget(turnAction);
-            return PlayCard(sourcePlayer, *turnAction.sourceCard, turnAction.shiftTarget);
-        }
+            return PlayCard(sourcePlayer, *turnAction.sourceCard, turnAction.shiftTarget, turnAction.targetIndex);
         case TurnAction::Type::UseAbility:
             return UseAbility(*turnAction.sourceCard, *turnAction.abilityName, turnAction);
         case TurnAction::Type::ChallengeCard:
@@ -186,7 +182,7 @@ bool Game::Perform(TurnAction& turnAction)
     }
 }
 
-bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget)
+bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget, int8_t targetIndex)
 {
     if (!sourcePlayer.CanPlay(sourceCard))
     {
@@ -216,24 +212,31 @@ bool Game::PlayCard(Player& sourcePlayer, Card& sourceCard, Card* shiftTarget)
         }
     }
 
+    // Move the card to the field or discard at the desired index.
+    std::vector<Card> toZone;
+
     if (sourceCard.cardType == CardType::Action)
     {
-        sourcePlayer.discard.push_back(sourceCard);
+        toZone = sourcePlayer.discard;
     }
     else
     {
-        sourcePlayer.field.push_back(sourceCard);
+        toZone = sourcePlayer.field;
     }
+
+    uint8_t toIndex = toZone.size();
+
+    if (targetIndex >= 0)
+    {
+        toIndex = targetIndex;
+    }
+
+    sourceCard.ChangeZone(sourcePlayer.hand, toZone, toIndex);
 
     // TODO: ETB effects
     // Add that effect to the bag since it's a triggered ability (I think).
     // There likely needs to be a step that says 'if there's only one Ability in the bag, perform it without waiting'
     // Probably need Ability (type=Triggered, sourcePlayer, bool Perform())
-
-
-    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
-                           { return &card == &sourceCard; });
-    sourcePlayer.hand.erase(it);
 
     // TODO: shift targets somehow need to be kept track of
 
@@ -264,20 +267,12 @@ bool Game::ChallengeCard(Player& sourcePlayer, Card& sourceCard, Player& targetP
 
     if (sourceCard.damageCounters >= sourceCard.willpower)
     {
-        sourcePlayer.discard.push_back(sourceCard);
-        auto it = std::find_if(sourcePlayer.field.begin(), sourcePlayer.field.end(), [&sourceCard](const Card& card)
-                            { return &card == &sourceCard; });
-
-        sourcePlayer.field.erase(it);
+        sourceCard.ChangeZone(sourcePlayer.field, sourcePlayer.discard);
     }
 
     if (targetCard.damageCounters >= targetCard.willpower)
     {
-        targetPlayer.discard.push_back(targetCard);
-        auto it = std::find_if(targetPlayer.field.begin(), targetPlayer.field.end(), [&sourceCard](const Card& card)
-                            { return &card == &sourceCard; });
-
-        targetPlayer.field.erase(it);
+        targetCard.ChangeZone(targetPlayer.field, targetPlayer.discard);
     }
 
     return true;
@@ -290,14 +285,9 @@ bool Game::InkCard(Player& sourcePlayer, Card& sourceCard)
         return false;
     }
 
-    sourcePlayer.inkwell.push_back(sourceCard);
-    
-    sourcePlayer.inkedThisTurn = true;
+    sourceCard.ChangeZone(sourcePlayer.hand, sourcePlayer.inkwell);
 
-    // Get card index.
-    auto it = std::find_if(sourcePlayer.hand.begin(), sourcePlayer.hand.end(), [&sourceCard](const Card& card)
-                           { return &card == &sourceCard; });
-    sourcePlayer.hand.erase(it);
+    sourcePlayer.inkedThisTurn = true;
 
     return true;
 }
@@ -459,23 +449,23 @@ bool Game::CanQuest(Player& sourcePlayer, Card& sourceCard)
     return true;
 }
 
-// bool Game::Elsa_SnowQueen_Freeze(TurnAction& turnAction)
-// {
-//     Card sourceCard = *turnAction.sourceCard;
-//     Card targetCard = *turnAction.targetCard;
+bool Game::Elsa_SnowQueen_Freeze(TurnAction& turnAction)
+{
+    Card sourceCard = *turnAction.sourceCard;
+    Card targetCard = *turnAction.targetCard;
 
-//     if (!sourceCard.isReady)
-//     {
-//         return false;
-//     }
+    if (!sourceCard.isReady)
+    {
+        return false;
+    }
 
-//     // Exert this card.
-//     sourceCard.isReady = false;
+    // Exert this card.
+    sourceCard.isReady = false;
 
-//     // Exert the chosen card.
-//     targetCard.isReady = false;
+    // Exert the chosen card.
+    targetCard.isReady = false;
 
-//     return true;
-// }
+    return true;
+}
 
 }  // namespace Redacted

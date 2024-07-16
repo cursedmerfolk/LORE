@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Card : Sprite3D
+public partial class Card : Sprite3D, LORE.CardInterface
 {
 	private Vector3 originalScale;
 	private Vector3 originalPosition;

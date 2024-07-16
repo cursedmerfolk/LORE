@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://u1fk04ouumou"]
+[gd_scene load_steps=7 format=3 uid="uid://u1fk04ouumou"]
 
 [ext_resource type="Texture2D" uid="uid://xm6362key7bs" path="res://Images/bg1.jpg" id="1_mmfdl"]
+[ext_resource type="Script" path="res://Scripts/Game.cs" id="1_wir0r"]
 [ext_resource type="PackedScene" uid="uid://dftko3h5lqrdf" path="res://Scenes/Card.tscn" id="2_8k5x7"]
 
 [sub_resource type="Environment" id="Environment_8p32h"]
@@ -12,6 +13,7 @@ ambient_light_color = Color(1, 1, 1, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_fw5q2"]
 
 [node name="Game" type="Node3D"]
+script = ExtResource("1_wir0r")
 
 [node name="Background" type="Sprite3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, 0, 0)

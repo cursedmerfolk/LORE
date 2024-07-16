@@ -139,6 +139,34 @@ bool Card::ApplyDamage(int8_t damageAmount)
     return true;
 }
 
+bool Card::ChangeZone(std::vector<Card>& from, std::vector<Card>& to, int8_t index)
+{
+    // Find the card in the given zone and erase it.
+    auto it = std::find_if(from.begin(), from.end(), [this](const Card& card)
+                           { return &card == this; });
+    from.erase(it);
+
+    if (index < 0)
+    {
+        index = to.size();
+    }
+
+    // Add the card to the new zone at the given index.
+    if (index == to.size())
+    {
+        to.push_back(*it);
+    }
+    else
+    {
+        to.insert(to.begin() + index, *it);
+    }
+
+    // Maintain the index of the card for easy retrieval.
+    it->index = index;
+
+    return true;
+}
+
 CardType getCardType(const std::string& typeStr)
 {
     if (typeStr == "Character") return CardType::Character;

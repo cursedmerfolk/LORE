@@ -40,9 +40,9 @@ find_package(jsoncpp REQUIRED)
 if (DO_TESTS)
 
     # add_subdirectory(tests)
-    # add_subdirectory(sandbox) # TODO: uncomment this
+    add_subdirectory(sandbox) # TODO: uncomment this
 
-# else()
+else()
 
     # Include SWIG module
     set_source_files_properties(wrapper.i PROPERTIES CPLUSPLUS ON)
