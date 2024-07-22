@@ -2,10 +2,10 @@ using System;
 
 public class Player : LORE.PlayerInterface
 {
-    public int test = 0;
+	public int test = 0;
 
-    public Player(string name)
-    {
-        Name = name;
-    }
+	public Player(string name)
+	{
+		Name = name;
+	}
 }
