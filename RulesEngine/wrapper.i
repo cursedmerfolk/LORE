@@ -1,5 +1,9 @@
 %module wrapper
 
+%include "stdint.i"
+%include "std_string.i"
+%include "std_vector.i"
+
 %{
 #include "GameWrapper.h"
 %}

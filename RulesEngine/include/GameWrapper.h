@@ -24,7 +24,7 @@ extern "C"
     Redacted::TurnAction ChallengeCard(void* gamePtr, Redacted::Player& sourcePlayer, Redacted::Card& sourceCard, Redacted::Player& targetPlayer, Redacted::Card& targetCard); 
     Redacted::TurnAction InkCard(void* gamePtr, Redacted::Player& sourcePlayer, Redacted::Card& sourceCard);
     Redacted::TurnAction QuestCard(void* gamePtr, Redacted::Player& sourcePlayer, Redacted::Card& sourceCard);
-    Redacted::TurnAction Mulligan(void* gamePtr, Redacted::Player& sourcePlayer, std::vector<Redacted::Card> cards);
+    Redacted::TurnAction Mulligan(void* gamePtr, Redacted::Player& sourcePlayer, std::vector<uint8_t> mulligans);
     Redacted::TurnAction PassTurn(void* gamePtr, Redacted::Player& sourcePlayer);
     Redacted::TurnAction MoveToLocation(void* gamePtr, Redacted::Player& sourcePlayer, Redacted::Card& sourceCard, Redacted::Card& targetLocation);
 

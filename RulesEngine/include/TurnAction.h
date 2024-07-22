@@ -64,7 +64,7 @@ public:
     Card* targetCard;
     std::vector<Card>* singers;
     std::string* abilityName;
-    std::vector<Card>* mulligans;
+    std::vector<uint8_t>* mulligans;
     Card* shiftTarget;
     uint8_t targetIndex;           // Index in the target zone being moved to.
 

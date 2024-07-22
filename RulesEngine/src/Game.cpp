@@ -14,7 +14,7 @@ Game::Game(unsigned int seed) : generator(seed)
     abilities["elsa_snowqueen_freeze"] = Game::Elsa_SnowQueen_Freeze;
 }
 
-bool Game::AddPlayer(std::string playerName)
+Player* Game::AddPlayer(std::string playerName)
 {
     for (Player& player : players)
     {
@@ -22,12 +22,12 @@ bool Game::AddPlayer(std::string playerName)
         {
             // TODO: add logging.
             // log("[Game::AddPlayer] Player name %s already exists.", playerName);
-            return false;
+            return nullptr;
         }
     }
 
     players.emplace_back(playerName);
-    return true;
+    return &players.at(players.size());
 }
 
 bool Game::StartGame()
@@ -127,10 +127,17 @@ bool Game::Perform(TurnAction& turnAction)
             return false;
         }
 
-        std::vector<Card> mulligans = *turnAction.mulligans;
+        std::vector<uint8_t> mulligans = *turnAction.mulligans;
+        std::sort(mulligans.rbegin(), mulligans.rend());  // Descending order.
 
-        for (Card& card : mulligans)
+        for (const uint8_t& cardIndex : mulligans)
         {
+            if (cardIndex < 0 || cardIndex >= sourcePlayer.hand.size())
+            {
+                return false;
+            }
+
+            Card card = sourcePlayer.hand.at(cardIndex);
             card.ChangeZone(sourcePlayer.hand, sourcePlayer.deck, 0);
         }
 

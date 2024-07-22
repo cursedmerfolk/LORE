@@ -25,9 +25,10 @@ void Game_Destroy(void* gamePtr)
 TurnAction AddPlayer(void* gamePtr, const char* playerName)
 {
     Game* game = (Game*)gamePtr;
-    
+
     TurnAction turnAction(TurnAction::Type::AddPlayer);
-    turnAction.succeeded = game->AddPlayer(playerName);
+    turnAction.sourcePlayer = game->AddPlayer(playerName);
+    turnAction.succeeded = turnAction.sourcePlayer != nullptr;
 
     return turnAction;
 }
@@ -95,7 +96,7 @@ TurnAction QuestCard(void* gamePtr, Redacted::Player& sourcePlayer, Redacted::Ca
     return turnAction;
 }
 
-TurnAction Mulligan(void* gamePtr, Redacted::Player& sourcePlayer, std::vector<Redacted::Card> mulligans)
+TurnAction Mulligan(void* gamePtr, Redacted::Player& sourcePlayer, std::vector<uint8_t> mulligans)
 {
     Game* game = (Game*)gamePtr;
 

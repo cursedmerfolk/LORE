@@ -41,7 +41,7 @@ public:
 
     Game(unsigned int seed = unsigned(std::time(0)));
 
-    bool AddPlayer(std::string playerName);
+    Player* AddPlayer(std::string playerName);
     bool StartGame();
 
     bool Perform(TurnAction& turnAction);

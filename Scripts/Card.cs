@@ -23,8 +23,6 @@ public partial class Card : Sprite3D, LORE.CardInterface
 		originalPosition = Position;
 		camera3d = GetTree().Root.GetNode<Camera3D>("Game/Camera3D");
 		Init();
-		
-		//LORE_Card test;
 	}
 
 	private void Init()
@@ -73,7 +71,7 @@ public partial class Card : Sprite3D, LORE.CardInterface
 					Owner.PlayCard(this);
 
 					// Need to be able to access properties
-					this.Cost;
+					byte temp = this.Cost;
 					// this.Owner; ?
 					// get -> Lore.Card(this).Cost ?
 
