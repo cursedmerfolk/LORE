@@ -1,206 +1,168 @@
 using System.Collections.Generic;
 
-
 namespace LORE
 {
+    public interface ICard
+    {
+        public LORE_Player GetOwner()
+        {
+            return Game.Cards[this].owner;
+        }
 
-	public interface CardInterface
-	{
+        public void SetOwner(LORE_Player value)
+        {
+            Game.Cards[this].owner = value;
+        }
 
-		public LORE_Player Owner
-		{
-			get
-			{
-				return Game.Cards[this].owner;
-			}
-			set
-			{
-				Game.Cards[this].owner = value;
-			}
-		}
+        public byte GetCost()
+        {
+            return Game.Cards[this].cost;
+        }
 
+        public void SetCost(byte value)
+        {
+            Game.Cards[this].cost = value;
+        }
 
-		public byte Cost
-		{
-			get
-			{
-				return Game.Cards[this].cost;
-			}
-			set
-			{
-				Game.Cards[this].cost = value;
-			}
-		}
+        public string GetFullName()
+        {
+            return Game.Cards[this].fullName;
+        }
 
-		public string FullName
-		{
-			get
-			{
-				return Game.Cards[this].fullName;
-			}
-			set
-			{
-				Game.Cards[this].fullName = value;
-			}
-		}
+        public void SetFullName(string value)
+        {
+            Game.Cards[this].fullName = value;
+        }
 
-		public string BaseName
-		{
-			get
-			{
-				return Game.Cards[this].baseName;
-			}
-			set
-			{
-				Game.Cards[this].baseName = value;
-			}
-		}
+        public string GetBaseName()
+        {
+            return Game.Cards[this].baseName;
+        }
 
-		public string Version
-		{
-			get
-			{
-				return Game.Cards[this].version;
-			}
-			set
-			{
-				Game.Cards[this].version = value;
-			}
-		}
+        public void SetBaseName(string value)
+        {
+            Game.Cards[this].baseName = value;
+        }
 
-		public CardType CardType
-		{
-			get
-			{
-				return Game.Cards[this].cardType;
-			}
-			set
-			{
-				Game.Cards[this].cardType = value;
-			}
-		}
+        public string GetVersion()
+        {
+            return Game.Cards[this].version;
+        }
 
-		// public IList<Classification> Classifications
-		// {
-		//     get
-		//     {
-		//         return new Game.Cards[this].classifications;
-		//     }
-			// set
-			// {
-			//     Game.Cards[this].classifications = value;
-			// }
-		// }
+        public void SetVersion(string value)
+        {
+            Game.Cards[this].version = value;
+        }
 
-		public byte Strength
-		{
-			get
-			{
-				return Game.Cards[this].strength;
-			}
-			set
-			{
-				Game.Cards[this].strength = value;
-			}
-		}
+        public CardType GetCardType()
+        {
+            return Game.Cards[this].cardType;
+        }
 
-		public byte MoveCost
-		{
-			get
-			{
-				return Game.Cards[this].moveCost;
-			}
-			set
-			{
-				Game.Cards[this].moveCost = value;
-			}
-		}
+        public void SetCardType(CardType value)
+        {
+            Game.Cards[this].cardType = value;
+        }
 
-		public byte Willpower
-		{
-			get
-			{
-				return Game.Cards[this].willpower;
-			}
-			set
-			{
-				Game.Cards[this].willpower = value;
-			}
-		}
+        // public List<Classification> GetClassifications()
+        // {
+        //     return Game.Cards[this].classifications;
+        // }
 
-		public byte Lore
-		{
-			get
-			{
-				return Game.Cards[this].lore;
-			}
-			set
-			{
-				Game.Cards[this].lore = value;
-			}
-		}
+        // public void SetClassifications(List<Classification> value)
+        // {
+        //     Game.Cards[this].classifications = value;
+        // }
 
-		public bool Inkable
-		{
-			get
-			{
-				return Game.Cards[this].inkable;
-			}
-			set
-			{
-				Game.Cards[this].inkable = value;
-			}
-		}
+        public byte GetStrength()
+        {
+            return Game.Cards[this].strength;
+        }
 
-		// public IList<string> AbilitiesText
-		// {
-		//     get
-		//     {
-		//         return new Game.Cards[this].abilitiesText;
-		//     }
-			// set
-			// {
-			//     Game.Cards[this].abilitiesText = value;
-			// }
-		// }
+        public void SetStrength(byte value)
+        {
+            Game.Cards[this].strength = value;
+        }
 
-		public Rarity Rarity
-		{
-			get
-			{
-				return Game.Cards[this].rarity;
-			}
-			set
-			{
-				Game.Cards[this].rarity = value;
-			}
-		}
+        public byte GetMoveCost()
+        {
+            return Game.Cards[this].moveCost;
+        }
 
-		public CardColor Color
-		{
-			get
-			{
-				return Game.Cards[this].color;
-			}
-			set
-			{
-				Game.Cards[this].color = value;
-			}
-		}
+        public void SetMoveCost(byte value)
+        {
+            Game.Cards[this].moveCost = value;
+        }
 
-		// TODO: not sure how to handle this yet.
-		// public Card AtLocation
-		// {
-		//     get
-		//     {
-		//         return Game.Cards[this].atLocation;
-		//     }
-		// set
-		// {
-		//     Game.Cards[this].atLocation = value;
-		// }
-		// }
+        public byte GetWillpower()
+        {
+            return Game.Cards[this].willpower;
+        }
 
-	}
+        public void SetWillpower(byte value)
+        {
+            Game.Cards[this].willpower = value;
+        }
 
-} // Namespace LORE
+        public byte GetLore()
+        {
+            return Game.Cards[this].lore;
+        }
+
+        public void SetLore(byte value)
+        {
+            Game.Cards[this].lore = value;
+        }
+
+        public bool GetInkable()
+        {
+            return Game.Cards[this].inkable;
+        }
+
+        public void SetInkable(bool value)
+        {
+            Game.Cards[this].inkable = value;
+        }
+
+        // public List<string> GetAbilitiesText()
+        // {
+        //     return Game.Cards[this].abilitiesText;
+        // }
+
+        // public void SetAbilitiesText(List<string> value)
+        // {
+        //     Game.Cards[this].abilitiesText = value;
+        // }
+
+        public Rarity GetRarity()
+        {
+            return Game.Cards[this].rarity;
+        }
+
+        public void SetRarity(Rarity value)
+        {
+            Game.Cards[this].rarity = value;
+        }
+
+        public CardColor GetColor()
+        {
+            return Game.Cards[this].color;
+        }
+
+        public void SetColor(CardColor value)
+        {
+            Game.Cards[this].color = value;
+        }
+
+        // public Card GetAtLocation()
+        // {
+        //     return Game.Cards[this].atLocation;
+        // }
+
+        // public void SetAtLocation(Card value)
+        // {
+        //     Game.Cards[this].atLocation = value;
+        // }
+    }
+}
+

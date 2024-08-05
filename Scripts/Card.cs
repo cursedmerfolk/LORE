@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Card : Sprite3D, LORE.CardInterface
+public partial class Card : Sprite3D, LORE.ICard
 {
 	private Vector3 originalScale;
 	private Vector3 originalPosition;
@@ -71,7 +71,7 @@ public partial class Card : Sprite3D, LORE.CardInterface
 					Owner.PlayCard(this);
 
 					// Need to be able to access properties
-					byte temp = this.Cost;
+					byte temp = ((LORE.ICard)this).GetCost();
 					// this.Owner; ?
 					// get -> Lore.Card(this).Cost ?
 

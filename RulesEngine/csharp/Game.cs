@@ -46,9 +46,9 @@ namespace LORE
 			}
 		}
 
-		public static bool AddPlayer(PlayerInterface player)
+		public static bool AddPlayer(IPlayer player)
 		{
-			LORE_TurnAction turnAction = wrapper.AddPlayer(ThisGame.lore_game, player.Name);
+			LORE_TurnAction turnAction = wrapper.AddPlayer(ThisGame.lore_game, player.GetName());
 			if (turnAction.sourcePlayer == null)
 			{
 				return false;
