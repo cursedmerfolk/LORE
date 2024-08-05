@@ -48,12 +48,22 @@ else()
     set_source_files_properties(wrapper.i PROPERTIES CPLUSPLUS ON)
 
     # Add SWIG Java module
-    swig_add_library(game_java LANGUAGE java SOURCES wrapper.i ${SOURCES})
-    target_link_libraries(game_java jsoncpp_lib)
+    # swig_add_library(game_java LANGUAGE java SOURCES wrapper.i ${SOURCES})
+    # target_link_libraries(game_java jsoncpp_lib)
 
     # Add SWIG CSharp module
-    swig_add_library(game_csharp LANGUAGE csharp SOURCES wrapper.i ${SOURCES})
+    swig_add_library(game_csharp LANGUAGE csharp OUTPUT_DIR csharp SOURCES wrapper.i ${SOURCES})
     target_link_libraries(game_csharp jsoncpp_lib)
+
+    # Copy DLL files after they are built.
+    add_custom_command(TARGET game_csharp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/allCards.json ${CMAKE_BINARY_DIR}/../..
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/game_csharp.dll ${CMAKE_BINARY_DIR}/../..
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/jsoncpp/build/bin/libjsoncpp.dll ${CMAKE_BINARY_DIR}/../..
+        COMMAND ${CMAKE_COMMAND} -E copy /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll ${CMAKE_BINARY_DIR}/../..
+        COMMAND ${CMAKE_COMMAND} -E copy /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll ${CMAKE_BINARY_DIR}/../..
+        # COMMAND ${CMAKE_COMMAND} -E copy /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll ${CMAKE_BINARY_DIR}/../..
+    )
 
     # Doesn't work on Windows.
     # swig_add_library(game_python LANGUAGE python SOURCES wrapper.i ${SOURCES})

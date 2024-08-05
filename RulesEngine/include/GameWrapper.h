@@ -17,7 +17,7 @@ extern "C"
     void* Game_Create_Seeded(unsigned int seed);
     void Game_Destroy(void* gamePtr);
     
-    Redacted::TurnAction AddPlayer(void* gamePtr, const char* playerName);
+    Redacted::TurnAction AddPlayer(void* gamePtr, std::string playerName);
     Redacted::TurnAction StartGame(void* gamePtr);
 
     Redacted::TurnAction PlayCard(void* gamePtr, Redacted::Player& sourcePlayer, Redacted::Card& sourceCard, int8_t targetIndex = -1);

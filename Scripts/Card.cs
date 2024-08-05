@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Card : Sprite3D, LORE.ICard
+public partial class Card : Sprite3D
 {
 	private Vector3 originalScale;
 	private Vector3 originalPosition;
@@ -17,8 +17,16 @@ public partial class Card : Sprite3D, LORE.ICard
 	private bool isDragging = false;
 	private const float RELEASE_THRESHOLD_HEIGHT = -1.5f;
 
+    // The internal LORE::Card associated with this Card object in Godot.
+    public LORE_Card lore_card = null;
+
 	public override void _Ready()
 	{
+        if (lore_card == null)
+        {
+            Console.WriteLine("[WARN] lore_card = null (this shouldn't happen)");
+        }
+
 		originalScale = Scale;
 		originalPosition = Position;
 		camera3d = GetTree().Root.GetNode<Camera3D>("Game/Camera3D");
@@ -63,17 +71,9 @@ public partial class Card : Sprite3D, LORE.ICard
 					onBoard = true;
 				}
 				// If card is raised high enough, play it if possible.
-				else if (Position.Z < RELEASE_THRESHOLD_HEIGHT && Owner.CanPlay(this))
+				else if (Position.Z < RELEASE_THRESHOLD_HEIGHT)  //  && lore_card.owner.CanPlay(lore_card)
 				{
-					// Game can potentially hang on to objects.
-					// Game.PlayCard(this);
-					// Maybe it has a table of csharp objects to c objects.
-					Owner.PlayCard(this);
-
-					// Need to be able to access properties
-					byte temp = ((LORE.ICard)this).GetCost();
-					// this.Owner; ?
-					// get -> Lore.Card(this).Cost ?
+                    // LORE.Game.PlayCard(lore_card, 0);  // Call the rules engine.
 
 					// Reset position after playing the card
 					tween = CreateTween().SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.Out);

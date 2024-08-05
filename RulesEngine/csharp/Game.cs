@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LORE
 {
-
 	/*
 	 * This code is complicated and hard to read.
 	 *
@@ -13,17 +14,17 @@ namespace LORE
 
 		private SWIGTYPE_p_void lore_game = null;
 
-		private static Game thisGame = null;
-		static Game ThisGame
+		private static Game m_instance = null;
+		static Game Instance
 		{
 			get
 			{
-				if (thisGame == null)
+				if (m_instance == null)
 				{
-					thisGame = new Game();
-					thisGame.lore_game = wrapper.Game_Create();
+					m_instance = new Game();
+					m_instance.lore_game = LORE_Wrapper.Game_Create();
 				}
-				return thisGame;
+				return m_instance;
 			}
 		}
 
@@ -34,7 +35,7 @@ namespace LORE
 		{
 			get
 			{
-				return ThisGame.cards;
+				return Instance.cards;
 			}
 		}
 
@@ -42,43 +43,63 @@ namespace LORE
 		{
 			get
 			{
-				return ThisGame.players;
+				return Instance.players;
 			}
 		}
 
-		public static bool AddPlayer(IPlayer player)
+		public static LORE_Player AddPlayer(object player, string playerName)
 		{
-			LORE_TurnAction turnAction = wrapper.AddPlayer(ThisGame.lore_game, player.GetName());
+            Console.WriteLine("hi1");
+			LORE_TurnAction turnAction = LORE_Wrapper.AddPlayer(Instance.lore_game, playerName);
 			if (turnAction.sourcePlayer == null)
 			{
-				return false;
+				return null;
 			}
+            Console.WriteLine("hi2");
+
 			Players[player] = turnAction.sourcePlayer;
-			return true;
+			return turnAction.sourcePlayer;
 		}
 
 		public static bool Start()
 		{
-			return wrapper.StartGame(ThisGame.lore_game).succeeded;
+			return LORE_Wrapper.StartGame(Instance.lore_game).succeeded;
 		}
 
-		public static LORE_TurnAction Mulligan(object player, List<byte> cards)
+		public static LORE_TurnAction Mulligan(object player, List<object> cards)
 		{
 			LORE_Player lore_player = Players[player];
-			return wrapper.Mulligan(lore_player, cards);
+
+			// Convert card objects to indices.
+			LORE_ByteVector cardIndices = new LORE_ByteVector();
+			foreach(object card in cards)
+			{
+				LORE_Card lore_card = Cards[card];
+				List<LORE_Card> player_hand = lore_card.owner.hand.ToList();
+				byte cardIndex = (byte)player_hand.FindIndex(c => c == lore_card);
+				cardIndices.Add(cardIndex);
+
+			}
+
+			return LORE_Wrapper.Mulligan(Instance.lore_game, lore_player, cardIndices);
 		}
 
-		public static LORE_TurnAction PlayCard(object player, object card)
+		public static LORE_TurnAction PlayCard(LORE_Card card, sbyte targetIndex)
 		{
-			LORE_Player lore_player = Players[player];
+			LORE_Player lore_player = Players[card.owner];
 			LORE_Card lore_card = Cards[card];
-			return wrapper.PlayCard(ThisGame.lore_game, lore_player, lore_card);
+			return LORE_Wrapper.PlayCard(Instance.lore_game, lore_player, lore_card, targetIndex);
+		}
+
+		public static LORE_Card GetCard(object card)
+		{
+			return Cards[card];
 		}
 
 		public static LORE_TurnAction PassTurn(object player)
 		{
 			LORE_Player lore_player = Players[player];
-			return wrapper.PassTurn(ThisGame.lore_game, lore_player);
+			return LORE_Wrapper.PassTurn(Instance.lore_game, lore_player);
 		}
 
 	}

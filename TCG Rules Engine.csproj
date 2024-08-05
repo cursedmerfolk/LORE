@@ -1,34 +1,10 @@
 
 <Project Sdk="Godot.NET.Sdk/4.2.2">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>TCGRulesEngine</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <None Update="game_csharp.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <!-- <ItemGroup>
-    <Reference Include=game_csharp>
-      <HintPath>..RulesEngine\core\build\game_csharp.dll</HintPath>
-    </Reference>
-  </ItemGroup> -->
-  <!-- <ItemGroup>
-    <Reference Include="game_csharp"> 
-      <HintPath>$(ProjectDir)RulesEngine\core\build\game_csharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup> -->
- <!-- <ItemGroup>
-    <Content Include="$(SolutionDir)RulesEngine\core\build\game_csharp.dll">
-      <Pack>true</Pack>
-      <BuildAction>None</BuildAction>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup> -->
 </Project>

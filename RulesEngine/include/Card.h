@@ -86,7 +86,7 @@ CardColor getColor(const std::string& colorStr);
 class Card
 {
 public:
-    Card() = delete;
+    Card() = default;
     ~Card() = default;
 
     Card(Player* owner_) : owner(owner_) {};

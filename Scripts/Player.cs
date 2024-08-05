@@ -1,11 +1,14 @@
 using System;
 
-public class Player : LORE.IPlayer
+public class Player
 {
-	public int test = 0;
+    public string Name;
+
+    // The internal LORE::Player associated with this Player object in Godot.
+    public LORE_Player lore_player;
 
 	public Player(string name)
 	{
-		((LORE.IPlayer)this).SetName(name);
+		Name = name;
 	}
 }

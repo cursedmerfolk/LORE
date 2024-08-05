@@ -5,7 +5,7 @@ namespace Redacted
 
 Game::Game(unsigned int seed) : generator(seed)
 {
-    if (!loadCardJson("../../allCards.json"))
+    if (!loadCardJson("RulesEngine/allCards.json"))
     {
         return;
     }

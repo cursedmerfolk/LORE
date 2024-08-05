@@ -22,7 +22,7 @@ void Game_Destroy(void* gamePtr)
     delete (Game*)gamePtr;
 }
 
-TurnAction AddPlayer(void* gamePtr, const char* playerName)
+TurnAction AddPlayer(void* gamePtr, std::string playerName)
 {
     Game* game = (Game*)gamePtr;
 
