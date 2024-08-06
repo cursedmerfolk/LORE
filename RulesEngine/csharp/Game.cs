@@ -49,13 +49,13 @@ namespace LORE
 
 		public static LORE_Player AddPlayer(object player, string playerName)
 		{
-            Console.WriteLine("hi1");
+            Console.WriteLine("hi1 vvv");
 			LORE_TurnAction turnAction = LORE_Wrapper.AddPlayer(Instance.lore_game, playerName);
 			if (turnAction.sourcePlayer == null)
 			{
 				return null;
 			}
-            Console.WriteLine("hi2");
+            Console.WriteLine("hi2 ^^^");
 
 			Players[player] = turnAction.sourcePlayer;
 			return turnAction.sourcePlayer;

@@ -27,7 +27,8 @@ Player* Game::AddPlayer(std::string playerName)
     }
 
     players.emplace_back(playerName);
-    return &players.at(players.size());
+    return nullptr;
+    // return &players.at(players.size());  // <-- problem line
 }
 
 bool Game::StartGame()

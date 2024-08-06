@@ -57,12 +57,12 @@ else()
 
     # Copy DLL files after they are built.
     add_custom_command(TARGET game_csharp POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/allCards.json ${CMAKE_BINARY_DIR}/../..
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/game_csharp.dll ${CMAKE_BINARY_DIR}/../..
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/jsoncpp/build/bin/libjsoncpp.dll ${CMAKE_BINARY_DIR}/../..
-        COMMAND ${CMAKE_COMMAND} -E copy /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll ${CMAKE_BINARY_DIR}/../..
-        COMMAND ${CMAKE_COMMAND} -E copy /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll ${CMAKE_BINARY_DIR}/../..
-        # COMMAND ${CMAKE_COMMAND} -E copy /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll ${CMAKE_BINARY_DIR}/../..
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/allCards.json ${CMAKE_SOURCE_DIR}/..
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/build/game_csharp.dll ${CMAKE_SOURCE_DIR}/..
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/jsoncpp/build/bin/libjsoncpp.dll ${CMAKE_SOURCE_DIR}/..
+        COMMAND ${CMAKE_COMMAND} -E copy /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll ${CMAKE_SOURCE_DIR}/..
+        COMMAND ${CMAKE_COMMAND} -E copy /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll ${CMAKE_SOURCE_DIR}/..
+        # COMMAND ${CMAKE_COMMAND} -E copy /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll ${CMAKE_SOURCE_DIR}/..
     )
 
     # Doesn't work on Windows.

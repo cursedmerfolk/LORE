@@ -1,6 +1,5 @@
 #include "GameWrapper.h"
 
-#include "TurnAction.h"
 #include "Game.h"
 
 using namespace Redacted;
@@ -27,7 +26,8 @@ TurnAction AddPlayer(void* gamePtr, std::string playerName)
     Game* game = (Game*)gamePtr;
 
     TurnAction turnAction(TurnAction::Type::AddPlayer);
-    turnAction.sourcePlayer = game->AddPlayer(playerName);
+    std::cout << "playerName: " << playerName << std::endl;
+    turnAction.sourcePlayer = game->AddPlayer(playerName);  // <-- problem line
     turnAction.succeeded = turnAction.sourcePlayer != nullptr;
 
     return turnAction;

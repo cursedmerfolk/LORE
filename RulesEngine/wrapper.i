@@ -10,12 +10,12 @@
 
 %include "GameWrapper.h"
 
-// Rename the classes if necessary
+// Rename the classes
 %rename(LORE_Card) Card;
 %rename(LORE_Player) Player;
 %rename(LORE_TurnAction) TurnAction;
 
-// This tells SWIG to convert these types to a native enumerable type.
+// This tells SWIG to help convert these types to a native enumerable type.
 %template(LORE_ByteVector) std::vector<uint8_t>;
 %template(LORE_CardVector) std::vector<Redacted::Card>;
 

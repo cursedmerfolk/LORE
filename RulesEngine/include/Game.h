@@ -33,11 +33,11 @@ public:
         Main,
     };
 
-    Game() = default;
+    // Game() = default;
 
-    ~Game() = default;
+    // ~Game() = default;
 
-    Game(const Game& other) = default;
+    // Game(const Game& other) = default;
 
     Game(unsigned int seed = unsigned(std::time(0)));
 
